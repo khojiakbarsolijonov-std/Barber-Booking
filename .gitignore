@@ -26,6 +26,7 @@ dist/
 # macOS
 .DS_Store
 *.pem
+*.tsbuildinfo
 
 # Logs
 npm-debug.log*

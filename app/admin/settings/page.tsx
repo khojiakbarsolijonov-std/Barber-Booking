@@ -6,6 +6,7 @@ import { useTheme } from 'next-themes';
 import AdminShell from '../_components/admin-shell';
 import { Settings, Save, Upload, Moon, Sun, User } from 'lucide-react';
 import { toast } from 'sonner';
+import { LUXURY_THEMES } from '@/lib/themes';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<any>(null);
@@ -72,8 +73,53 @@ export default function SettingsPage() {
         <div className="bg-card rounded-xl h-96 animate-pulse" />
       ) : (
         <div className="space-y-4">
-          <Section title="Ko'rinish (Mavzu)">
-            <p className="text-xs text-muted-foreground mb-3">Boshqaruv panelining rang mavzusini tanlang.</p>
+          <Section title="Brendning Lyuks Ranglar Mavzusi (Brand Color Theme)">
+            <p className="text-xs text-muted-foreground mb-3">Mijozlarga ko'rinadigan bron sahifasining eksklyuziv lyuks dizayn palitrasi.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+              {Object.values(LUXURY_THEMES).map((th) => {
+                const isSelected = (settings?.themePreset || 'noir-gold') === th.id;
+                return (
+                  <button
+                    key={th.id}
+                    type="button"
+                    onClick={() => {
+                      update('themePreset', th.id);
+                      update('accentColor', th.primary);
+                    }}
+                    className={`flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all relative overflow-hidden ${
+                      isSelected
+                        ? 'border-2 shadow-lg bg-card'
+                        : 'border-border bg-muted/50 hover:bg-muted opacity-80 hover:opacity-100'
+                    }`}
+                    style={isSelected ? { borderColor: th.primary, boxShadow: `0 0 16px ${th.glow}` } : {}}
+                  >
+                    {/* Swatch */}
+                    <div className="w-12 h-12 rounded-lg border border-white/10 shrink-0 flex flex-col overflow-hidden shadow-inner" style={{ backgroundColor: th.bg }}>
+                      <div className="h-6 w-full" style={{ backgroundColor: th.surface }} />
+                      <div className="h-6 w-full flex items-center justify-center">
+                        <div className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: th.primary }} />
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold text-sm truncate">{th.name}</p>
+                        {isSelected && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider" style={{ backgroundColor: th.badgeBg, color: th.primary }}>
+                            Faol
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{th.description}</p>
+                      <p className="text-[11px] font-mono mt-1 opacity-60">{th.tagline} • {th.primary}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </Section>
+
+          <Section title="Boshqaruv Paneli Rejimi">
+            <p className="text-xs text-muted-foreground mb-3">Admin panelining ko'rinish rejimi.</p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setTheme('dark')}

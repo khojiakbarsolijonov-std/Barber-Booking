@@ -22,9 +22,10 @@ export async function PUT(req: Request) {
     const body = await req.json();
     let settings = await prisma.businessSettings.findFirst();
     if (!settings) settings = await prisma.businessSettings.create({ data: {} });
+    const { id, createdAt, updatedAt, ...updateData } = body;
     const updated = await prisma.businessSettings.update({
       where: { id: settings.id },
-      data: body,
+      data: updateData,
     });
     return NextResponse.json(updated);
   } catch (e: any) {

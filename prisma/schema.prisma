@@ -147,6 +147,7 @@ model BusinessSettings {
   instagram                String  @default("@jasur_alijanovich_")
   telegramUsername         String?
   accentColor              String  @default("#C8A97E")
+  themePreset              String  @default("noir-gold")
   slotInterval             Int     @default(30)
   defaultRebookingDays     Int     @default(20)
   rebookingEnabled         Boolean @default(true)
