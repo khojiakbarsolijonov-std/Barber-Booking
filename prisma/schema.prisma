@@ -1,0 +1,218 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("user")
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Customer {
+  id               String              @id @default(cuid())
+  name             String
+  phone            String              @unique
+  telegramId       String?             @unique
+  telegramUsername String?
+  notes            String?
+  createdAt        DateTime            @default(now())
+  appointments     Appointment[]
+  reminders        RebookingReminder[]
+  notifications    Notification[]
+  reviews          Review[]
+}
+
+model Service {
+  id                    String              @id @default(cuid())
+  name                  String
+  description           String?
+  price                 Int
+  duration              Int
+  imageUrl              String?
+  rebookingReminderDays Int?
+  isActive              Boolean             @default(true)
+  order                 Int                 @default(0)
+  createdAt             DateTime            @default(now())
+  appointments          Appointment[]
+  reminders             RebookingReminder[]
+}
+
+model Appointment {
+  id                 String              @id @default(cuid())
+  customerId         String
+  serviceId          String
+  date               DateTime            @db.Date
+  startTime          String
+  endTime            String
+  price              Int
+  status             String              @default("new")
+  telegramUserId     String?
+  cancellationReason String?
+  notes              String?
+  createdAt          DateTime            @default(now())
+  completedAt        DateTime?
+  reminderSentAt     DateTime?
+  customer           Customer            @relation(fields: [customerId], references: [id])
+  service            Service             @relation(fields: [serviceId], references: [id])
+  notifications      Notification[]
+  reminders          RebookingReminder[]
+  reviews            Review[]
+
+  @@index([date, status])
+  @@index([customerId])
+}
+
+model WorkingSchedule {
+  id        String  @id @default(cuid())
+  dayOfWeek Int
+  isWorking Boolean @default(true)
+  startTime String
+  endTime   String
+
+  @@unique([dayOfWeek])
+}
+
+model BreakTime {
+  id        String    @id @default(cuid())
+  dayOfWeek Int?
+  date      DateTime? @db.Date
+  startTime String
+  endTime   String
+  label     String?   @default("Tanaffus")
+}
+
+model DayOff {
+  id     String   @id @default(cuid())
+  date   DateTime @db.Date
+  reason String?
+
+  @@unique([date])
+}
+
+model BusinessSettings {
+  id                       String  @id @default(cuid())
+  businessName             String  @default("Jasurbek Barber")
+  barberName               String  @default("Jasurbek Xudoyberganov")
+  phone                    String  @default("+998 90 561 88 52")
+  address                  String  @default("Farg'ona shahar, Beeline ofisi ro'parasida")
+  instagram                String  @default("@jasur_alijanovich_")
+  telegramUsername         String?
+  accentColor              String  @default("#C8A97E")
+  slotInterval             Int     @default(30)
+  defaultRebookingDays     Int     @default(20)
+  rebookingEnabled         Boolean @default(true)
+  rebookingReminderTime    String  @default("11:00")
+  rebookingMessageTemplate String  @default("Assalomu alaykum, {name} 👋\n\nSo'nggi tashrifingizdan beri {days} kun o'tdi.\n\nYana fresh haircut vaqti kelmadimikan? ✂️")
+  thankYouMessage          String  @default("Rahmat! Bugungi tashrifingiz uchun tashakkur. Sizni yana kutib qolamiz! ✂️")
+  avatarUrl                String?
+  logoUrl                  String?
+}
+
+model Notification {
+  id            String       @id @default(cuid())
+  customerId    String?
+  appointmentId String?
+  type          String
+  channel       String       @default("telegram")
+  status        String       @default("pending")
+  message       String
+  telegramId    String?
+  sentAt        DateTime?
+  failedAt      DateTime?
+  retryCount    Int          @default(0)
+  createdAt     DateTime     @default(now())
+  customer      Customer?    @relation(fields: [customerId], references: [id])
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+
+  @@index([status, type])
+  @@index([createdAt])
+}
+
+model RebookingReminder {
+  id            String      @id @default(cuid())
+  customerId    String
+  appointmentId String
+  serviceId     String?
+  scheduledDate DateTime    @db.Date
+  scheduledTime String
+  reminderDays  Int
+  status        String      @default("scheduled")
+  sentAt        DateTime?
+  cancelledAt   DateTime?
+  createdAt     DateTime    @default(now())
+  customer      Customer    @relation(fields: [customerId], references: [id])
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  service       Service?    @relation(fields: [serviceId], references: [id])
+
+  @@index([scheduledDate, status])
+}
+
+model TelegramLinkToken {
+  id            String   @id @default(cuid())
+  token         String   @unique @default(cuid())
+  customerId    String
+  appointmentId String?
+  used          Boolean  @default(false)
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+}
+
+model Review {
+  id            String      @id @default(cuid())
+  customerId    String
+  appointmentId String?
+  rating        Int
+  comment       String?
+  createdAt     DateTime    @default(now())
+  customer      Customer    @relation(fields: [customerId], references: [id])
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+}

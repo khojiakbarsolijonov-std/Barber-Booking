@@ -1,0 +1,26 @@
+{
+  "name": "Jasurbek Barber — Admin Panel",
+  "short_name": "Barber Admin",
+  "description": "Jasurbek Barber boshqaruv paneli — bronlar, mijozlar, jadval va CRM.",
+  "start_url": "/admin",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#C8A97E",
+  "orientation": "portrait",
+  "scope": "/admin",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"]
+}
