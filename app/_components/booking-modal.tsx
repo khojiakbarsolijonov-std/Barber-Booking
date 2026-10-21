@@ -144,6 +144,7 @@ export default function BookingModal({ services, selectedService, accentColor, t
           date: selectedDate,
           startTime: selectedTime,
           notes: notes.trim() || undefined,
+          addons: selectedAddons,
         }),
       });
       if (res.status === 409) {

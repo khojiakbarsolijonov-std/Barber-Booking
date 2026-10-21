@@ -152,7 +152,7 @@ export default function BookingPage() {
                 <span>Premium Erkaklar Sartaroshxonasi</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 leading-[1.1]">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 leading-[1.1] break-words">
                 {settings?.barberName ?? 'Jasurbek Xudoyberganov'}
               </h1>
 

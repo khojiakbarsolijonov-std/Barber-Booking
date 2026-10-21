@@ -8,8 +8,12 @@ export async function POST(req: Request) {
   if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const { date, reason } = await req.json();
-    const dayOff = await prisma.dayOff.create({
-      data: { date: new Date(date + 'T00:00:00Z'), reason: reason ?? null },
+    if (!date) return NextResponse.json({ error: 'Sana kiritilishi shart' }, { status: 400 });
+    const dateObj = new Date(date + 'T00:00:00Z');
+    const dayOff = await prisma.dayOff.upsert({
+      where: { date: dateObj },
+      update: { reason: reason ?? null },
+      create: { date: dateObj, reason: reason ?? null },
     });
     return NextResponse.json(dayOff, { status: 201 });
   } catch (e: any) {

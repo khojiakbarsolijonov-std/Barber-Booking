@@ -225,6 +225,11 @@ export default function BookingsPage() {
                 <span>{a?.startTime ?? ''} - {a?.endTime ?? ''}</span>
                 <span className="font-mono">{((a?.price ?? 0)).toLocaleString('uz-UZ')} so&apos;m</span>
               </div>
+              {a?.notes && (
+                <div className="mb-3 p-2 bg-muted/60 border border-border rounded-lg text-xs">
+                  <span className="text-muted-foreground">Izoh / VIP:</span> <span className="text-foreground font-medium">{a.notes}</span>
+                </div>
+              )}
               {(a?.status === 'confirmed' || a?.status === 'new') && (
                 <div className="flex gap-2">
                   <button

@@ -25,28 +25,42 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       include: { customer: true, service: true },
     });
 
-    // Send Telegram on completion
-    if (status === 'completed' && appt?.customer?.telegramId) {
+    // When completed: send Telegram thank you (if telegramId linked) AND schedule rebooking reminder
+    if (status === 'completed') {
       const settings = await prisma.businessSettings.findFirst();
-      const msg = settings?.thankYouMessage?.replace('{name}', appt?.customer?.name ?? '') ?? 'Rahmat!';
-      sendTelegramMessage(appt.customer.telegramId, msg).catch(() => {});
 
-      // Schedule rebooking reminder
-      if (settings?.rebookingEnabled) {
-        const days = appt?.service?.rebookingReminderDays ?? settings?.defaultRebookingDays ?? 20;
-        const scheduledDate = new Date(appt.date);
-        scheduledDate.setUTCDate(scheduledDate.getUTCDate() + days);
-        await prisma.rebookingReminder.create({
-          data: {
-            customerId: appt.customerId,
-            appointmentId: appt.id,
-            serviceId: appt.serviceId,
-            scheduledDate,
-            scheduledTime: settings?.rebookingReminderTime ?? '11:00',
-            reminderDays: days,
-          },
-        });
+      if (appt?.customer?.telegramId) {
+        const msg = settings?.thankYouMessage?.replace('{name}', appt?.customer?.name ?? '') ?? 'Rahmat!';
+        sendTelegramMessage(appt.customer.telegramId, msg).catch(() => {});
       }
+
+      // Schedule rebooking reminder if enabled and not already scheduled
+      if (settings?.rebookingEnabled) {
+        const existingReminder = await prisma.rebookingReminder.findFirst({
+          where: { appointmentId: appt.id },
+        });
+        if (!existingReminder) {
+          const days = appt?.service?.rebookingReminderDays ?? settings?.defaultRebookingDays ?? 20;
+          const scheduledDate = new Date(appt.date);
+          scheduledDate.setUTCDate(scheduledDate.getUTCDate() + days);
+          await prisma.rebookingReminder.create({
+            data: {
+              customerId: appt.customerId,
+              appointmentId: appt.id,
+              serviceId: appt.serviceId,
+              scheduledDate,
+              scheduledTime: settings?.rebookingReminderTime ?? '11:00',
+              reminderDays: days,
+            },
+          });
+        }
+      }
+    } else if (status === 'cancelled') {
+      // Cancel any scheduled rebooking reminders if appointment is cancelled
+      await prisma.rebookingReminder.updateMany({
+        where: { appointmentId: id, status: 'scheduled' },
+        data: { status: 'cancelled', cancelledAt: new Date() },
+      });
     }
 
     return NextResponse.json(appt);
