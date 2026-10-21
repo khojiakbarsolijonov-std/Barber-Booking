@@ -29,7 +29,11 @@ export async function GET() {
     });
 
     const [todayAppts, todayCompleted, weekAppts, monthAppts, nextAppt, pendingReminders, totalCustomers] = await Promise.all([
-      prisma.appointment.findMany({ where: { date: { gte: today, lt: tomorrow }, status: { notIn: ['cancelled', 'no_show'] } } }),
+      prisma.appointment.findMany({ 
+        where: { date: { gte: today, lt: tomorrow } },
+        include: { customer: true, service: true },
+        orderBy: { startTime: 'asc' },
+      }),
       prisma.appointment.findMany({ where: completedInRange(today, tomorrow) }),
       prisma.appointment.findMany({ where: completedInRange(weekStart, tomorrow) }),
       prisma.appointment.findMany({ where: completedInRange(monthStart, tomorrow) }),
@@ -47,13 +51,24 @@ export async function GET() {
     const monthRevenue = monthAppts.reduce((s: number, a: any) => s + (a?.price ?? 0), 0);
 
     return NextResponse.json({
-      todayBookings: todayAppts?.length ?? 0,
+      todayBookings: todayAppts.filter((a: any) => !['cancelled', 'no_show'].includes(a.status))?.length ?? 0,
       todayCompleted: todayCompleted?.length ?? 0,
       todayRevenue,
       weekRevenue,
       monthRevenue,
       pendingReminders,
       totalCustomers,
+      todayAppointments: todayAppts.map((a: any) => ({
+        id: a.id,
+        customer: a?.customer?.name ?? 'Noma\'lum',
+        phone: a?.customer?.phone ?? '',
+        service: a?.service?.name ?? '',
+        startTime: a.startTime,
+        endTime: a.endTime,
+        price: a.price,
+        status: a.status,
+        notes: a.notes,
+      })),
       nextAppointment: nextAppt ? {
         id: nextAppt.id,
         customer: nextAppt?.customer?.name,

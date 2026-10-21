@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { 
   X, ChevronLeft, ChevronRight, Check, Clock, Scissors, 
-  Calendar, User, Phone, Send, MapPin, Copy, Sparkles,
-  Sun, Sunset, Moon, ExternalLink, ShieldCheck, Plus, CheckCircle2
+  Calendar, User, Phone, CheckCircle2, Sparkles, Plus,
+  ExternalLink, MessageCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { LuxuryTheme, getTheme } from '@/lib/themes';
@@ -28,18 +28,19 @@ interface Props {
   onClose: () => void;
 }
 
-const STEPS = ['Xizmat', 'Sana & Vaqt', "Ma'lumotlar", 'Chipta'];
+const STEPS = ['Xizmat & Qo\'shimchalar', 'Sana & Vaqt', "Ma'lumotlar", 'Tasdiq'];
 
 const VIP_ADDONS = [
   { id: 'massage', name: 'Bosh & Yuz massaji', price: 40000, duration: 15, desc: 'Issiq sochiq va efir moylari bilan relaks' },
   { id: 'styling', name: 'Premium soch yuvish & styling', price: 25000, duration: 10, desc: 'Import vositalar va fen yordamida shakllantirish' },
-  { id: 'mask', name: 'Qora qora niqob (Black mask)', price: 35000, duration: 15, desc: 'Yuz terisini tozalash va parvarishlash' },
+  { id: 'mask', name: 'Qora niqob (Black mask)', price: 35000, duration: 15, desc: 'Yuz terisini tozalash va parvarishlash' },
 ];
 
 export default function BookingModal({ services, selectedService, accentColor, theme, settings, onClose }: Props) {
   const th = theme || getTheme(settings?.themePreset, accentColor);
-  const [step, setStep] = useState(selectedService ? 1 : 0);
-  const [service, setService] = useState<ServiceType | null>(selectedService);
+  const [step, setStep] = useState(0);
+  const [service, setService] = useState<ServiceType | null>(selectedService ?? services[0] ?? null);
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
@@ -47,15 +48,14 @@ export default function BookingModal({ services, selectedService, accentColor, t
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('+998 ');
   const [notes, setNotes] = useState('');
-  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [bookingResult, setBookingResult] = useState<any>(null);
 
-  // Generate 30 days ahead
+  // Generate 21 days ahead
   const dates = useMemo(() => {
     const list: string[] = [];
     const now = new Date();
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 21; i++) {
       const d = new Date(now);
       d.setDate(d.getDate() + i);
       list.push(d.toISOString().split('T')[0] ?? '');
@@ -63,7 +63,7 @@ export default function BookingModal({ services, selectedService, accentColor, t
     return list;
   }, []);
 
-  // Pre-select today on first open
+  // Pre-select today on mount
   useEffect(() => {
     if (dates.length > 0 && !selectedDate) {
       setSelectedDate(dates[0]);
@@ -81,11 +81,6 @@ export default function BookingModal({ services, selectedService, accentColor, t
       .catch(() => setAvailableSlots([]))
       .finally(() => setLoadingSlots(false));
   }, [selectedDate, service?.id]);
-
-  const selectService = (s: ServiceType) => {
-    setService(s);
-    setStep(1);
-  };
 
   const toggleAddon = (id: string) => {
     setSelectedAddons(prev => 
@@ -109,7 +104,7 @@ export default function BookingModal({ services, selectedService, accentColor, t
     return { morning, afternoon, evening };
   }, [availableSlots]);
 
-  // Total price calculation
+  // Total price and duration calculation
   const totalPrice = useMemo(() => {
     const base = service?.price ?? 0;
     const addonsTotal = selectedAddons.reduce((sum, id) => {
@@ -213,15 +208,15 @@ export default function BookingModal({ services, selectedService, accentColor, t
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4"
+      className="fixed inset-0 z-[100] bg-black/75 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4"
       onClick={(e: any) => { if (e?.target === e?.currentTarget) onClose(); }}
     >
       <motion.div
         initial={{ y: '100%' }}
         animate={{ y: 0 }}
         exit={{ y: '100%' }}
-        transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-        className="w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col border border-white/10 shadow-2xl overflow-hidden"
+        transition={{ type: 'spring', damping: 30, stiffness: 350 }}
+        className="w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[92vh] flex flex-col border border-white/10 shadow-2xl overflow-hidden"
         style={{ backgroundColor: th.surface }}
       >
         {/* Modal Header */}
@@ -230,27 +225,27 @@ export default function BookingModal({ services, selectedService, accentColor, t
             {step > 0 && step < 3 && (
               <button 
                 onClick={() => setStep(step - 1)} 
-                className="p-1.5 hover:bg-white/10 rounded-xl transition-colors text-stone-300"
+                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-stone-300"
               >
                 <ChevronLeft size={18} />
               </button>
             )}
             <div>
-              <p className="text-[10px] font-bold tracking-widest uppercase" style={{ color: th.primary }}>
+              <p className="text-[10px] font-semibold tracking-wider uppercase text-stone-400">
                 Qadam {step + 1} / {STEPS.length}
               </p>
-              <h3 className="font-bold text-base text-white">{STEPS[step]}</h3>
+              <h3 className="font-semibold text-base text-white">{STEPS[step]}</h3>
             </div>
           </div>
           <button 
             onClick={onClose} 
-            className="p-2 hover:bg-white/10 rounded-xl transition-colors text-stone-400 hover:text-white"
+            className="p-2 hover:bg-white/10 rounded-lg transition-colors text-stone-400 hover:text-white"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Step Progress Halos */}
+        {/* Minimal Progress Indicator */}
         <div className="flex gap-1.5 px-6 pt-3 pb-1">
           {STEPS.map((_, i) => (
             <div 
@@ -258,104 +253,171 @@ export default function BookingModal({ services, selectedService, accentColor, t
               className="flex-1 h-1 rounded-full transition-all duration-300" 
               style={{ 
                 backgroundColor: i <= step ? th.primary : 'rgba(255,255,255,0.08)',
-                boxShadow: i === step ? `0 0 10px ${th.glow}` : 'none'
               }} 
             />
           ))}
         </div>
 
-        {/* Dynamic Step Content */}
+        {/* Step Body */}
         <div className="flex-1 overflow-y-auto px-6 py-5">
-          
-          {/* STEP 0: Select Service */}
+          {/* STEP 0: Service Selection + VIP Add-ons */}
           {step === 0 && (
-            <div className="space-y-3">
-              <p className="text-xs text-stone-400 mb-2">Kerakli xizmat turini tanlang:</p>
-              {services.map((s) => (
+            <div className="space-y-5">
+              <div>
+                <label className="text-xs text-stone-400 font-medium block mb-2.5">
+                  1. Asosiy xizmat turini tanlang:
+                </label>
+                <div className="space-y-2">
+                  {services.map(s => {
+                    const isSelected = service?.id === s.id;
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => setService(s)}
+                        className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-left transition-all ${
+                          isSelected 
+                            ? 'border-white/30 bg-white/[0.06] shadow-sm' 
+                            : 'border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.04]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 border border-white/10"
+                            style={{ 
+                              backgroundColor: isSelected ? th.badgeBg : 'rgba(255,255,255,0.03)',
+                              color: isSelected ? th.primary : '#a8a29e'
+                            }}
+                          >
+                            <Scissors size={16} />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm text-white">{s.name}</p>
+                            <span className="flex items-center gap-1 text-xs text-stone-400 mt-0.5">
+                              <Clock size={11} /> {s.duration} daqiqa
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-white tabular-nums">
+                            {s.price.toLocaleString('uz-UZ')} <span className="text-xs text-stone-400 font-normal">so&apos;m</span>
+                          </p>
+                          {isSelected && (
+                            <span className="text-[10px] font-medium" style={{ color: th.primary }}>
+                              Tanlangan ✓
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* VIP Addons Block */}
+              {service && (
+                <div className="pt-4 border-t border-white/[0.08]">
+                  <div className="flex items-center gap-1.5 mb-2.5">
+                    <Sparkles size={14} style={{ color: th.primary }} />
+                    <span className="text-xs font-semibold text-white">VIP Qo&apos;shimcha xizmatlar (ixtiyoriy)</span>
+                  </div>
+                  <div className="space-y-2">
+                    {VIP_ADDONS.map(addon => {
+                      const isChecked = selectedAddons.includes(addon.id);
+                      return (
+                        <button
+                          key={addon.id}
+                          type="button"
+                          onClick={() => toggleAddon(addon.id)}
+                          className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+                            isChecked 
+                              ? 'border-white/20 bg-white/[0.05]' 
+                              : 'border-white/[0.06] bg-white/[0.015] hover:bg-white/[0.03]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div 
+                              className={`w-4 h-4 rounded flex items-center justify-center border transition-colors ${
+                                isChecked ? 'text-[#121316]' : 'border-white/20'
+                              }`}
+                              style={isChecked ? { backgroundColor: th.primary, borderColor: th.primary } : {}}
+                            >
+                              {isChecked && <Check size={12} strokeWidth={3} />}
+                            </div>
+                            <div>
+                              <p className="text-xs font-medium text-white">{addon.name}</p>
+                              <p className="text-[11px] text-stone-400">{addon.desc} (+{addon.duration} min)</p>
+                            </div>
+                          </div>
+                          <span className="text-xs font-semibold tabular-nums shrink-0 ml-2" style={{ color: th.primary }}>
+                            +{addon.price.toLocaleString('uz-UZ')} so&apos;m
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Next Step Action Button */}
+              {service && (
                 <button
-                  key={s.id}
-                  onClick={() => selectService(s)}
-                  className="w-full flex items-center justify-between p-4 rounded-2xl border border-white/[0.08] hover:border-white/20 bg-white/[0.02] hover:bg-white/[0.05] transition-all text-left group"
+                  onClick={() => setStep(1)}
+                  className="w-full mt-4 py-3.5 rounded-xl font-semibold text-xs tracking-wide uppercase transition-all flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99]"
+                  style={{ backgroundColor: th.primary, color: '#121316' }}
                 >
-                  <div className="flex items-center gap-3.5">
-                    <div 
-                      className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border"
-                      style={{ 
-                        backgroundColor: th.badgeBg, 
-                        borderColor: th.border,
-                        color: th.primary 
-                      }}
-                    >
-                      <Scissors size={20} />
-                    </div>
-                    <div>
-                      <p className="font-bold text-sm text-white group-hover:text-amber-200 transition-colors">
-                        {s.name}
-                      </p>
-                      <div className="flex items-center gap-2 text-xs text-stone-400 mt-0.5">
-                        <span className="flex items-center gap-1"><Clock size={11} /> {s.duration} daqiqa</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-mono text-sm font-extrabold" style={{ color: th.primary }}>
-                      {s.price.toLocaleString('uz-UZ')} so&apos;m
-                    </p>
-                    <span className="text-[11px] text-stone-500 group-hover:text-stone-300 transition-colors">Tanlash →</span>
-                  </div>
+                  <span>Sana & Vaqtni tanlash ({totalDuration} daqiqa • {totalPrice.toLocaleString('uz-UZ')} so&apos;m)</span>
+                  <ChevronRight size={14} />
                 </button>
-              ))}
+              )}
             </div>
           )}
 
-          {/* STEP 1: Luxury Date & Grouped Time Picker */}
+          {/* STEP 1: Date & Time Slot Selection */}
           {step === 1 && (
             <div className="space-y-5">
-              {/* Selected service pill summary */}
+              {/* Service Summary Strip */}
               <div className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
                 <div className="flex items-center gap-2">
-                  <Scissors size={15} style={{ color: th.primary }} />
+                  <Scissors size={14} style={{ color: th.primary }} />
                   <span className="font-semibold text-xs text-white">{service?.name}</span>
+                  {selectedAddons.length > 0 && (
+                    <span className="text-[11px] text-stone-400">(+{selectedAddons.length} qo&apos;shimcha)</span>
+                  )}
                 </div>
                 <button 
                   onClick={() => setStep(0)} 
-                  className="text-xs underline text-stone-400 hover:text-white"
+                  className="text-xs text-stone-400 hover:text-white underline underline-offset-2"
                 >
                   O&apos;zgartirish
                 </button>
               </div>
 
-              {/* Horizontal Date Ribbon */}
+              {/* Date Selection */}
               <div>
-                <div className="flex items-center justify-between mb-2.5">
-                  <span className="text-xs font-semibold text-stone-300">1. Sanani tanlang:</span>
-                  <span className="text-[11px] text-stone-400">Gorizontal suring →</span>
-                </div>
+                <span className="text-xs font-semibold text-stone-300 block mb-2.5">
+                  1. Qabul kunini tanlang:
+                </span>
                 <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x">
-                  {dates.map((d) => {
-                    const info = formatDateLabel(d);
-                    const isSelected = selectedDate === d;
+                  {dates.map(dStr => {
+                    const info = formatDateLabel(dStr);
+                    const isSelected = selectedDate === dStr;
                     return (
                       <button
-                        key={d}
-                        onClick={() => {
-                          setSelectedDate(d);
-                          setSelectedTime('');
-                        }}
-                        className={`shrink-0 w-16 py-3 rounded-2xl flex flex-col items-center justify-center border transition-all snap-start ${
-                          isSelected
-                            ? 'border-2 shadow-lg scale-105'
-                            : 'border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] text-stone-300'
+                        key={dStr}
+                        onClick={() => { setSelectedDate(dStr); setSelectedTime(''); }}
+                        className={`shrink-0 w-16 py-3 rounded-xl flex flex-col items-center justify-center border transition-all snap-start ${
+                          isSelected 
+                            ? 'shadow-md scale-102 border-transparent' 
+                            : 'border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.05] text-stone-300'
                         }`}
                         style={isSelected ? { 
                           backgroundColor: th.primary, 
-                          color: '#0B0C10',
-                          borderColor: th.primary,
-                          boxShadow: `0 0 16px ${th.glow}` 
+                          color: '#121316',
                         } : {}}
                       >
-                        <span className="text-[10px] font-bold uppercase tracking-wider opacity-80">{info.dayName}</span>
-                        <span className="text-xl font-extrabold my-0.5">{info.dateNum}</span>
+                        <span className="text-[10px] font-semibold uppercase tracking-wider opacity-85">{info.dayName}</span>
+                        <span className="text-lg font-bold my-0.5 tabular-nums">{info.dateNum}</span>
                         <span className="text-[10px] opacity-75">{info.month}</span>
                       </button>
                     );
@@ -363,29 +425,29 @@ export default function BookingModal({ services, selectedService, accentColor, t
                 </div>
               </div>
 
-              {/* Time Slots (Grouped by Morning / Afternoon / Evening) */}
+              {/* Time Slots */}
               <div>
-                <span className="text-xs font-semibold text-stone-300 block mb-2.5">2. Bo&apos;sh vaqtni tanlang:</span>
-                
+                <span className="text-xs font-semibold text-stone-300 block mb-2.5">
+                  2. Bo&apos;sh vaqtni tanlang:
+                </span>
+
                 {loadingSlots ? (
                   <div className="py-12 flex flex-col items-center justify-center gap-2">
-                    <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: th.primary, borderTopColor: 'transparent' }} />
+                    <div className="w-6 h-6 border-2 border-stone-600 border-t-transparent rounded-full animate-spin" style={{ borderTopColor: th.primary }} />
                     <span className="text-xs text-stone-400">Jadval tekshirilmoqda...</span>
                   </div>
                 ) : (availableSlots?.length ?? 0) === 0 ? (
-                  <div className="p-8 text-center rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-                    <Clock size={28} className="mx-auto mb-2 text-stone-500" />
+                  <div className="p-8 text-center rounded-xl bg-white/[0.02] border border-white/[0.06]">
+                    <Clock size={24} className="mx-auto mb-2 text-stone-500" />
                     <p className="text-sm font-semibold text-stone-300">Bu kunda bo&apos;sh vaqt qolmadi</p>
                     <p className="text-xs text-stone-400 mt-1">Iltimos, yuqoridagi sanalardan boshqa kunni tanlang.</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {/* Morning */}
                     {groupedSlots.morning.length > 0 && (
                       <div>
-                        <div className="flex items-center gap-1.5 text-xs text-stone-400 mb-2">
-                          <Sun size={13} className="text-amber-400" />
-                          <span>Ertalab (09:00 - 12:00)</span>
+                        <div className="text-[11px] font-medium text-stone-400 mb-2">
+                          Ertalab (09:00 - 12:00)
                         </div>
                         <div className="grid grid-cols-4 gap-2">
                           {groupedSlots.morning.map(slot => (
@@ -401,12 +463,10 @@ export default function BookingModal({ services, selectedService, accentColor, t
                       </div>
                     )}
 
-                    {/* Afternoon */}
                     {groupedSlots.afternoon.length > 0 && (
                       <div>
-                        <div className="flex items-center gap-1.5 text-xs text-stone-400 mb-2">
-                          <Sunset size={13} className="text-orange-400" />
-                          <span>Tushdan keyin (12:00 - 17:00)</span>
+                        <div className="text-[11px] font-medium text-stone-400 mb-2">
+                          Tushdan keyin (12:00 - 17:00)
                         </div>
                         <div className="grid grid-cols-4 gap-2">
                           {groupedSlots.afternoon.map(slot => (
@@ -422,12 +482,10 @@ export default function BookingModal({ services, selectedService, accentColor, t
                       </div>
                     )}
 
-                    {/* Evening */}
                     {groupedSlots.evening.length > 0 && (
                       <div>
-                        <div className="flex items-center gap-1.5 text-xs text-stone-400 mb-2">
-                          <Moon size={13} className="text-blue-400" />
-                          <span>Kechqurun (17:00 - 20:30)</span>
+                        <div className="text-[11px] font-medium text-stone-400 mb-2">
+                          Kechqurun (17:00 - 20:30)
                         </div>
                         <div className="grid grid-cols-4 gap-2">
                           {groupedSlots.evening.map(slot => (
@@ -446,119 +504,81 @@ export default function BookingModal({ services, selectedService, accentColor, t
                 )}
               </div>
 
-              {/* Next Step Button */}
               {selectedTime && (
-                <motion.button
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                <button
                   onClick={() => setStep(2)}
-                  className="w-full py-4 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-lg"
-                  style={{ backgroundColor: th.primary, color: '#0B0C10', boxShadow: `0 4px 20px ${th.glow}` }}
+                  className="w-full py-3.5 rounded-xl font-semibold text-xs tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-[0.99]"
+                  style={{ backgroundColor: th.primary, color: '#121316' }}
                 >
                   <span>Davom etish ({selectedTime})</span>
-                  <ArrowRight size={15} />
-                </motion.button>
+                  <ChevronRight size={14} />
+                </button>
               )}
             </div>
           )}
 
-          {/* STEP 2: Customer Details & VIP Add-ons */}
+          {/* STEP 2: Customer Contact Details */}
           {step === 2 && (
             <div className="space-y-5">
-              {/* Contact Inputs */}
               <div className="space-y-3.5">
                 <div>
-                  <label className="text-xs text-stone-300 font-semibold mb-1.5 block">Ismingiz *</label>
+                  <label className="text-xs text-stone-300 font-medium mb-1.5 block">
+                    Ismingiz *
+                  </label>
                   <div className="relative">
-                    <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-500" />
+                    <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-500" />
                     <input
                       type="text"
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={e => setName(e.target.value)}
                       placeholder="Ism Familiya"
-                      className="w-full pl-10 pr-4 py-3 bg-white/[0.04] rounded-xl border border-white/10 focus:outline-none text-sm text-white placeholder:text-stone-500 transition-colors"
-                      style={{ borderColor: name ? th.borderActive : undefined }}
+                      className="w-full pl-10 pr-4 py-2.5 bg-white/[0.04] rounded-xl border border-white/10 focus:outline-none focus:border-stone-400 text-sm text-white placeholder:text-stone-500 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs text-stone-300 font-semibold mb-1.5 block">Telefon raqamingiz *</label>
+                  <label className="text-xs text-stone-300 font-medium mb-1.5 block">
+                    Telefon raqamingiz *
+                  </label>
                   <div className="relative">
-                    <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-500" />
+                    <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-500" />
                     <input
                       type="tel"
                       value={phone}
-                      onChange={(e) => setPhone(formatPhoneInput(e.target.value))}
+                      onChange={e => setPhone(formatPhoneInput(e.target.value))}
                       placeholder="+998 90 123 45 67"
-                      className="w-full pl-10 pr-4 py-3 bg-white/[0.04] rounded-xl border border-white/10 focus:outline-none text-sm font-mono text-white placeholder:text-stone-500 transition-colors"
-                      style={{ borderColor: phone.length >= 17 ? th.borderActive : undefined }}
+                      className="w-full pl-10 pr-4 py-2.5 bg-white/[0.04] rounded-xl border border-white/10 focus:outline-none focus:border-stone-400 text-sm tabular-nums text-white placeholder:text-stone-500 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs text-stone-400 mb-1.5 block">Maxsus istaklar (ixtiyoriy)</label>
+                  <label className="text-xs text-stone-400 mb-1.5 block">
+                    Maxsus istaklar (ixtiyoriy)
+                  </label>
                   <input
                     type="text"
                     value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
+                    onChange={e => setNotes(e.target.value)}
                     placeholder="Masalan: Soch o'rtacha uzunlikda qolsin"
-                    className="w-full px-4 py-2.5 bg-white/[0.04] rounded-xl border border-white/10 focus:outline-none text-xs text-white placeholder:text-stone-500 transition-colors"
+                    className="w-full px-4 py-2 bg-white/[0.04] rounded-xl border border-white/10 focus:outline-none focus:border-stone-400 text-xs text-white placeholder:text-stone-500 transition-colors"
                   />
                 </div>
               </div>
 
-              {/* VIP Add-on Upsells */}
-              <div>
-                <div className="flex items-center gap-1.5 mb-2.5">
-                  <Sparkles size={14} style={{ color: th.primary }} />
-                  <span className="text-xs font-bold text-white">VIP Qo&apos;shimcha xizmatlar</span>
-                </div>
-                <div className="space-y-2">
-                  {VIP_ADDONS.map(addon => {
-                    const isChecked = selectedAddons.includes(addon.id);
-                    return (
-                      <button
-                        key={addon.id}
-                        type="button"
-                        onClick={() => toggleAddon(addon.id)}
-                        className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
-                          isChecked 
-                            ? 'border-2 bg-white/[0.06]' 
-                            : 'border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04]'
-                        }`}
-                        style={isChecked ? { borderColor: th.primary } : {}}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div 
-                            className={`w-5 h-5 rounded-md flex items-center justify-center border transition-colors ${
-                              isChecked ? 'text-black' : 'border-white/20'
-                            }`}
-                            style={isChecked ? { backgroundColor: th.primary, borderColor: th.primary } : {}}
-                          >
-                            {isChecked && <Check size={13} strokeWidth={3} />}
-                          </div>
-                          <div>
-                            <p className="text-xs font-semibold text-white">{addon.name}</p>
-                            <p className="text-[11px] text-stone-400">{addon.desc}</p>
-                          </div>
-                        </div>
-                        <span className="font-mono text-xs font-bold shrink-0 ml-2" style={{ color: th.primary }}>
-                          +{addon.price.toLocaleString('uz-UZ')} so&apos;m
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Executive Order Summary Card */}
-              <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2.5 text-xs">
+              {/* Order Summary Card */}
+              <div className="p-4 rounded-xl bg-black/30 border border-white/[0.08] space-y-2 text-xs">
                 <div className="flex justify-between text-stone-400">
                   <span>Asosiy xizmat:</span>
                   <span className="text-white font-medium">{service?.name}</span>
                 </div>
+                {selectedAddons.length > 0 && (
+                  <div className="flex justify-between text-stone-400">
+                    <span>Qo&apos;shimchalar:</span>
+                    <span className="text-white font-medium">+{selectedAddons.length} ta xizmat</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-stone-400">
                   <span>Sana & Vaqt:</span>
                   <span className="text-white font-medium">{selectedDate} • {selectedTime}</span>
@@ -567,15 +587,9 @@ export default function BookingModal({ services, selectedService, accentColor, t
                   <span>Taxminiy davomiylik:</span>
                   <span className="text-white font-medium">{totalDuration} daqiqa</span>
                 </div>
-                {selectedAddons.length > 0 && (
-                  <div className="flex justify-between text-stone-400">
-                    <span>Qo&apos;shimchalar:</span>
-                    <span className="text-white font-medium">+{selectedAddons.length} ta xizmat</span>
-                  </div>
-                )}
-                <div className="pt-2 border-t border-white/10 flex justify-between items-center">
-                  <span className="font-bold text-sm text-white">Jami to&apos;lov (joyida):</span>
-                  <span className="font-mono text-base font-extrabold" style={{ color: th.primary }}>
+                <div className="pt-2 border-t border-white/[0.08] flex justify-between items-center">
+                  <span className="font-semibold text-sm text-white">Jami to&apos;lov:</span>
+                  <span className="text-base font-bold tabular-nums" style={{ color: th.primary }}>
                     {totalPrice.toLocaleString('uz-UZ')} so&apos;m
                   </span>
                 </div>
@@ -583,123 +597,109 @@ export default function BookingModal({ services, selectedService, accentColor, t
 
               {/* Submit CTA */}
               <button
-                onClick={handleSubmit}
                 disabled={submitting}
-                className="w-full py-4 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-xl disabled:opacity-50 transition-all"
-                style={{ 
-                  backgroundColor: th.primary, 
-                  color: '#0B0C10',
-                  boxShadow: `0 4px 25px ${th.glow}` 
-                }}
+                onClick={handleSubmit}
+                className="w-full py-3.5 rounded-xl font-semibold text-xs tracking-wide uppercase flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-[0.99] disabled:opacity-50"
+                style={{ backgroundColor: th.primary, color: '#121316' }}
               >
                 {submitting ? (
-                  <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-stone-800 border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
-                    <CheckCircle2 size={16} />
-                    <span>Bronni Tasdiqlash</span>
+                    <Check size={15} />
+                    <span>Bronni tasdiqlash</span>
                   </>
                 )}
               </button>
             </div>
           )}
 
-          {/* STEP 3: Digital Boarding Pass Ticket Confirmation */}
-          {step === 3 && bookingResult && (
+          {/* STEP 3: Elegant VIP Confirmation */}
+          {step === 3 && (
             <div className="space-y-5 py-2">
               <div className="text-center">
                 <div 
-                  className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg"
-                  style={{ backgroundColor: th.badgeBg, color: th.primary, boxShadow: `0 0 20px ${th.glow}` }}
+                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 border"
+                  style={{ 
+                    backgroundColor: th.badgeBg, 
+                    color: th.primary,
+                    borderColor: th.badgeBorder 
+                  }}
                 >
-                  <Check size={28} strokeWidth={3} />
+                  <CheckCircle2 size={24} />
                 </div>
-                <h3 className="text-xl font-extrabold text-white">Bron muvaffaqiyatli band qilindi!</h3>
+                <h3 className="text-lg font-bold text-white">Bron tasdiqlandi</h3>
                 <p className="text-xs text-stone-400 mt-1">Siz uchun maxsus vaqt ajratildi. Kutib qolamiz!</p>
               </div>
 
-              {/* Luxury Boarding Pass Ticket Card */}
-              <div className="relative rounded-2xl p-5 border border-white/15 bg-black/60 shadow-2xl overflow-hidden">
-                {/* Perforated border decoration */}
-                <div className="flex items-center justify-between pb-3 border-b border-dashed border-white/20 mb-3">
+              {/* Clean Confirmation Card */}
+              <div className="rounded-xl p-5 border border-white/10 bg-black/40 space-y-3">
+                <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
                   <div>
-                    <span className="text-[10px] font-mono tracking-widest uppercase text-stone-400">Salon</span>
-                    <p className="font-bold text-sm text-white">{settings?.businessName ?? 'Jasurbek Barber'}</p>
+                    <span className="text-[10px] uppercase tracking-wider text-stone-500">Salon</span>
+                    <p className="font-semibold text-sm text-white">{settings?.businessName ?? 'Jasurbek Barber'}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-[10px] font-mono tracking-widest uppercase text-stone-400">Holat</span>
-                    <p className="text-xs font-bold text-emerald-400 flex items-center gap-1 justify-end">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Tasdiqlangan
+                    <span className="text-[10px] uppercase tracking-wider text-stone-500">Holat</span>
+                    <p className="text-xs font-semibold text-emerald-400 flex items-center gap-1 justify-end">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      Tasdiqlangan
                     </p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 py-2 text-xs">
+                <div className="grid grid-cols-2 gap-3 text-xs">
                   <div>
                     <span className="text-stone-500 text-[10px] uppercase">Xizmat</span>
-                    <p className="font-semibold text-white mt-0.5">{bookingResult?.service ?? service?.name}</p>
+                    <p className="font-medium text-white mt-0.5">{bookingResult?.service ?? service?.name}</p>
                   </div>
                   <div>
                     <span className="text-stone-500 text-[10px] uppercase">Sana</span>
-                    <p className="font-semibold text-white mt-0.5">{bookingResult?.date ?? selectedDate}</p>
+                    <p className="font-medium text-white mt-0.5">{bookingResult?.date ?? selectedDate}</p>
                   </div>
                   <div>
                     <span className="text-stone-500 text-[10px] uppercase">Vaqt</span>
-                    <p className="font-mono text-sm font-bold text-amber-200 mt-0.5" style={{ color: th.primary }}>
+                    <p className="text-sm font-semibold tabular-nums mt-0.5" style={{ color: th.primary }}>
                       {bookingResult?.startTime ?? selectedTime} — {bookingResult?.endTime ?? ''}
                     </p>
                   </div>
                   <div>
                     <span className="text-stone-500 text-[10px] uppercase">To&apos;lov</span>
-                    <p className="font-mono text-sm font-bold text-white mt-0.5">
+                    <p className="text-sm font-semibold text-white tabular-nums mt-0.5">
                       {(bookingResult?.price ?? totalPrice).toLocaleString('uz-UZ')} so&apos;m
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2 text-xs text-stone-400">
-                  <MapPin size={13} style={{ color: th.primary }} />
-                  <span className="truncate">{settings?.address ?? "Farg'ona shahar"}</span>
+                <div className="pt-3 border-t border-white/[0.08] text-[11px] text-stone-400 flex items-center gap-1.5">
+                  <User size={13} className="text-stone-500" />
+                  <span>Mijoz: {bookingResult?.customer ?? name} • {phone}</span>
                 </div>
               </div>
 
-              {/* Action Buttons: Calendar, Telegram, Maps */}
-              <div className="space-y-2.5">
-                {/* Google Calendar Link */}
+              {/* Action Buttons */}
+              <div className="space-y-2">
                 <a
                   href={generateGoogleCalendarUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 bg-white/[0.08] hover:bg-white/[0.12] border border-white/10 text-white transition-colors"
+                  className="w-full py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-xs font-semibold text-white flex items-center justify-center gap-2 transition-colors"
                 >
-                  <Calendar size={15} style={{ color: th.primary }} />
+                  <Calendar size={14} style={{ color: th.primary }} />
                   <span>Google Calendar-ga qo&apos;shish</span>
-                  <ExternalLink size={12} className="opacity-50" />
+                  <ExternalLink size={12} className="opacity-60" />
                 </a>
-
-                {/* Telegram Bot Link */}
-                {bookingResult?.telegramLink && (
-                  <a
-                    href={bookingResult.telegramLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-3 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 bg-[#0088cc]/20 hover:bg-[#0088cc]/30 border border-[#0088cc]/30 text-sky-200 transition-colors"
-                  >
-                    <Send size={15} className="text-[#0088cc]" />
-                    <span>Telegram botda eslatma yoqish</span>
-                  </a>
-                )}
 
                 <button
                   onClick={onClose}
-                  className="w-full py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-xs font-semibold text-stone-300 transition-colors"
+                  className="w-full py-3 rounded-xl font-semibold text-xs tracking-wide transition-all"
+                  style={{ backgroundColor: th.primary, color: '#121316' }}
                 >
-                  Yopish
+                  Tayyor
                 </button>
               </div>
             </div>
           )}
-
         </div>
       </motion.div>
     </motion.div>
@@ -709,24 +709,20 @@ export default function BookingModal({ services, selectedService, accentColor, t
 function SlotButton({ slot, isSelected, theme, onSelect }: { slot: string; isSelected: boolean; theme: LuxuryTheme; onSelect: () => void }) {
   return (
     <button
+      type="button"
       onClick={onSelect}
-      className={`py-2.5 rounded-xl font-mono text-xs font-bold border transition-all ${
-        isSelected
-          ? 'scale-105 shadow-md font-extrabold'
-          : 'border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.08] text-stone-300'
+      className={`py-2 px-1 text-xs rounded-lg font-semibold tabular-nums border transition-all text-center ${
+        isSelected 
+          ? 'shadow-sm' 
+          : 'border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06] text-stone-300'
       }`}
       style={isSelected ? { 
         backgroundColor: theme.primary, 
-        color: '#0B0C10',
-        borderColor: theme.primary,
-        boxShadow: `0 0 12px ${theme.glow}` 
+        color: '#121316',
+        borderColor: theme.primary 
       } : {}}
     >
       {slot}
     </button>
   );
-}
-
-function ArrowRight({ size = 16 }: { size?: number }) {
-  return <ChevronRight size={size} />;
 }

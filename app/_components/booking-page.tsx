@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Scissors, MapPin, Phone, Instagram, Clock, ChevronRight, 
-  Star, Sparkles, Coffee, ShieldCheck, Calendar, ArrowRight,
-  Navigation, CheckCircle2
+  Star, Coffee, ShieldCheck, Calendar, ArrowRight,
+  Navigation, Sparkles, Check
 } from 'lucide-react';
 import Image from 'next/image';
 import BookingModal from './booking-modal';
-import { getTheme, LUXURY_THEMES } from '@/lib/themes';
+import { getTheme } from '@/lib/themes';
 
 interface ServiceType {
   id: string;
@@ -70,30 +70,29 @@ export default function BookingPage() {
 
   return (
     <div 
-      className="min-h-screen text-stone-100 selection:bg-amber-500/20 selection:text-amber-200 antialiased font-sans"
+      className="min-h-screen text-stone-100 selection:bg-stone-700 selection:text-white antialiased font-sans"
       style={{ backgroundColor: th.bg }}
     >
-      {/* Top Floating Glass Navigation */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-black/40 border-b border-white/[0.06] transition-all">
+      {/* Top Refined Atelier Header */}
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#121316]/85 border-b border-white/[0.07] transition-all">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div 
-              className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm tracking-wider shadow-lg"
+              className="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm tracking-wider border border-white/10"
               style={{ 
-                background: `linear-gradient(135deg, ${th.primary}, ${th.secondary})`, 
-                color: '#0B0C10',
-                boxShadow: `0 0 15px ${th.glow}` 
+                backgroundColor: th.surface, 
+                color: th.primary
               }}
             >
-              <Scissors size={18} strokeWidth={2.5} />
+              <Scissors size={17} strokeWidth={2.2} />
             </div>
             <div>
               <p className="font-semibold text-sm tracking-wide text-white">
                 {settings?.businessName ?? 'Jasurbek Barber'}
               </p>
-              <div className="flex items-center gap-1.5 text-[11px] text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Ochiq • 20:00 gacha</span>
+              <div className="flex items-center gap-1.5 text-[11px] text-stone-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span>Bugun ochiq • 20:00 gacha</span>
               </div>
             </div>
           </div>
@@ -101,58 +100,52 @@ export default function BookingPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => openBooking()}
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all transform hover:brightness-110 active:scale-[0.98]"
               style={{ 
                 backgroundColor: th.primary, 
-                color: '#0B0C10',
-                boxShadow: `0 2px 14px ${th.glow}`
+                color: '#121316',
               }}
             >
-              <Calendar size={14} /> BRON QILISH
+              <Calendar size={13} />
+              <span>Vaqtni tanlash</span>
             </button>
             <a
               href={`tel:${(settings?.phone ?? '+998905618852').replace(/\s/g, '')}`}
-              className="p-2.5 rounded-full bg-white/[0.05] border border-white/10 hover:bg-white/[0.1] text-stone-300 transition-colors"
+              className="p-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] text-stone-300 transition-colors"
               title="Qo'ng'iroq qilish"
             >
-              <Phone size={16} />
+              <Phone size={15} />
             </a>
           </div>
         </div>
       </header>
 
-      {/* Luxury Editorial Hero Section */}
+      {/* Editorial Atelier Hero */}
       <section className="relative pt-12 pb-20 px-4 sm:px-6 overflow-hidden" style={{ background: th.bgGradient }}>
-        {/* Subtle Ambient Radial Lighting */}
-        <div 
-          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[350px] rounded-full blur-[120px] pointer-events-none opacity-20"
-          style={{ backgroundColor: th.primary }}
-        />
-
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-14">
             
-            {/* Left Content */}
+            {/* Left Column: Craft & Persona */}
             <motion.div 
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
+              transition={{ duration: 0.6 }}
               className="flex-1 text-center md:text-left"
             >
-              {/* Luxury Badge */}
+              {/* Refined Eyebrow */}
               <div 
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 border backdrop-blur-md"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium tracking-wider mb-5 border"
                 style={{ 
                   backgroundColor: th.badgeBg, 
                   color: th.badgeText, 
                   borderColor: th.badgeBorder 
                 }}
               >
-                <Sparkles size={13} style={{ color: th.primary }} />
-                <span>Premium Erkaklar Sartaroshxonasi</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: th.primary }} />
+                <span>Master Barber & Men&apos;s Grooming</span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 leading-[1.1] break-words">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-4 leading-[1.12]">
                 {settings?.barberName ?? 'Jasurbek Xudoyberganov'}
               </h1>
 
@@ -161,96 +154,90 @@ export default function BookingPage() {
               </p>
 
               {/* Social Proof & Rating Strip */}
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-8 text-xs text-stone-300">
-                <div className="flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] px-3 py-1.5 rounded-full">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-8 text-xs text-stone-300">
+                <div className="flex items-center gap-1.5 bg-white/[0.03] border border-white/[0.07] px-3.5 py-1.5 rounded-full">
                   <div className="flex text-amber-400">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={13} fill="currentColor" />
+                      <Star key={i} size={12} fill="currentColor" />
                     ))}
                   </div>
                   <span className="font-semibold text-white">4.9</span>
-                  <span className="text-stone-400">(480+ mijozlar)</span>
+                  <span className="text-stone-400">(480+ mamnun mijozlar)</span>
                 </div>
-                <div className="flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] px-3 py-1.5 rounded-full">
+                <div className="flex items-center gap-1.5 bg-white/[0.03] border border-white/[0.07] px-3.5 py-1.5 rounded-full">
                   <ShieldCheck size={14} style={{ color: th.primary }} />
-                  <span>100% steril uskunalar</span>
+                  <span>100% sterilizatsiya</span>
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3.5">
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                   onClick={() => openBooking()}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-sm font-bold tracking-wider uppercase transition-all shadow-xl"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl text-sm font-semibold tracking-wide transition-all shadow-md"
                   style={{ 
                     backgroundColor: th.primary, 
-                    color: '#0B0C10',
-                    boxShadow: `0 4px 25px ${th.glow}` 
+                    color: '#121316',
                   }}
                 >
-                  <Scissors size={18} />
+                  <Calendar size={16} />
                   <span>Vaqtni tanlash & Band qilish</span>
-                  <ArrowRight size={16} />
+                  <ArrowRight size={15} />
                 </motion.button>
 
                 <a
                   href="#services"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-xs font-semibold tracking-wide text-stone-300 bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-xs font-medium tracking-wide text-stone-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors"
                 >
-                  Xizmatlar bilan tanishish
+                  Xizmatlar menyusi
                 </a>
               </div>
 
-              {/* Contact Info Pills */}
-              <div className="mt-8 pt-6 border-t border-white/[0.08] flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-stone-400">
+              {/* Contact and Location Meta */}
+              <div className="mt-8 pt-6 border-t border-white/[0.06] flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-stone-400">
                 <a 
                   href={`https://instagram.com/${(settings?.instagram ?? '@jasur_alijanovich_').replace('@', '')}`}
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="flex items-center gap-1.5 hover:text-white transition-colors"
                 >
-                  <Instagram size={15} style={{ color: th.primary }} />
+                  <Instagram size={14} style={{ color: th.primary }} />
                   <span>{settings?.instagram ?? '@jasur_alijanovich_'}</span>
                 </a>
                 <span className="text-stone-600">•</span>
                 <span className="flex items-center gap-1.5">
-                  <MapPin size={15} style={{ color: th.primary }} />
+                  <MapPin size={14} style={{ color: th.primary }} />
                   <span>{settings?.address ?? "Farg'ona shahar, Beeline ro'parasi"}</span>
                 </span>
               </div>
             </motion.div>
 
-            {/* Right Editorial Portrait Card */}
+            {/* Right Column: Architectural Barber Portrait */}
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.15 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
               className="relative shrink-0"
             >
               <div 
-                className="relative w-64 h-80 sm:w-72 sm:h-92 rounded-2xl p-1 shadow-2xl overflow-hidden group"
-                style={{ 
-                  background: `linear-gradient(145deg, ${th.borderActive}, transparent, ${th.border})`,
-                  boxShadow: `0 10px 40px -10px ${th.glow}`
-                }}
+                className="relative w-64 h-80 sm:w-72 sm:h-92 rounded-2xl overflow-hidden border border-white/10 shadow-2xl group"
+                style={{ backgroundColor: th.surface }}
               >
-                <div className="relative w-full h-full rounded-[14px] overflow-hidden bg-stone-900">
-                  <Image
-                    src={settings?.avatarUrl ?? '/barber-jasurbek.jpg'}
-                    alt={settings?.barberName ?? 'Jasurbek Xudoyberganov'}
-                    fill
-                    className="object-cover object-top filter contrast-[1.03] group-hover:scale-105 transition-transform duration-700"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                  
-                  {/* Floating VIP Card Tag */}
-                  <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl backdrop-blur-md bg-black/60 border border-white/10">
-                    <p className="font-bold text-sm text-white">{settings?.barberName ?? 'Jasurbek'}</p>
-                    <p className="text-[11px] font-medium" style={{ color: th.primary }}>Master Barber & Grooming Specialist</p>
-                  </div>
+                <Image
+                  src={settings?.avatarUrl ?? '/barber-jasurbek.jpg'}
+                  alt={settings?.barberName ?? 'Jasurbek Xudoyberganov'}
+                  fill
+                  className="object-cover object-top filter contrast-[1.02] group-hover:scale-102 transition-transform duration-500"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#121316] via-transparent to-transparent opacity-80" />
+                
+                {/* Understated Portrait Plaque */}
+                <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl backdrop-blur-md bg-[#181A20]/80 border border-white/[0.08]">
+                  <p className="font-semibold text-sm text-white">{settings?.barberName ?? 'Jasurbek'}</p>
+                  <p className="text-[11px] font-normal" style={{ color: th.primary }}>Master Barber</p>
                 </div>
               </div>
             </motion.div>
@@ -259,36 +246,28 @@ export default function BookingPage() {
         </div>
       </section>
 
-      {/* Luxury Amenities / VIP Standards Bar */}
-      <section className="border-y border-white/[0.06] bg-white/[0.015] py-6 px-4">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div className="flex flex-col items-center gap-1.5 p-2">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center bg-white/[0.04] mb-1" style={{ color: th.primary }}>
-              <Clock size={18} />
-            </div>
-            <p className="font-semibold text-xs text-white">Navbatsiz Xizmat</p>
-            <p className="text-[11px] text-stone-400">Aniq belgilangan vaqtda qabul</p>
+      {/* Atelier Craft Standards Ribbon */}
+      <section className="border-y border-white/[0.06] bg-white/[0.015] py-7 px-4">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="flex flex-col items-center md:items-start gap-1 text-center md:text-left">
+            <span className="text-[11px] font-mono tracking-wider text-stone-500 uppercase">Standart 01</span>
+            <p className="font-semibold text-xs text-white">Aniq vaqtda qabul</p>
+            <p className="text-[11px] text-stone-400">Navbatsiz va kutishlarsiz individual vaqt</p>
           </div>
-          <div className="flex flex-col items-center gap-1.5 p-2">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center bg-white/[0.04] mb-1" style={{ color: th.primary }}>
-              <Coffee size={18} />
-            </div>
+          <div className="flex flex-col items-center md:items-start gap-1 text-center md:text-left">
+            <span className="text-[11px] font-mono tracking-wider text-stone-500 uppercase">Standart 02</span>
             <p className="font-semibold text-xs text-white">Lounge & Kofe</p>
-            <p className="text-[11px] text-stone-400">Bepul espresso va salqin ichimliklar</p>
+            <p className="text-[11px] text-stone-400">Bepul espresso va qulay kutish zonasi</p>
           </div>
-          <div className="flex flex-col items-center gap-1.5 p-2">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center bg-white/[0.04] mb-1" style={{ color: th.primary }}>
-              <ShieldCheck size={18} />
-            </div>
-            <p className="font-semibold text-xs text-white">Yuqori Gigiyena</p>
-            <p className="text-[11px] text-stone-400">Har bir mijoz uchun sterilizatsiya</p>
+          <div className="flex flex-col items-center md:items-start gap-1 text-center md:text-left">
+            <span className="text-[11px] font-mono tracking-wider text-stone-500 uppercase">Standart 03</span>
+            <p className="font-semibold text-xs text-white">100% Sterillik</p>
+            <p className="text-[11px] text-stone-400">Har bir mijoz uchun alohida dezinfeksiya</p>
           </div>
-          <div className="flex flex-col items-center gap-1.5 p-2">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center bg-white/[0.04] mb-1" style={{ color: th.primary }}>
-              <Sparkles size={18} />
-            </div>
-            <p className="font-semibold text-xs text-white">Premium Kosmetika</p>
-            <p className="text-[11px] text-stone-400">Import qilingan parvarish vositalari</p>
+          <div className="flex flex-col items-center md:items-start gap-1 text-center md:text-left">
+            <span className="text-[11px] font-mono tracking-wider text-stone-500 uppercase">Standart 04</span>
+            <p className="font-semibold text-xs text-white">Tanlangan brendlar</p>
+            <p className="text-[11px] text-stone-400">Import qilingan premium parvarish vositalari</p>
           </div>
         </div>
       </section>
@@ -296,18 +275,18 @@ export default function BookingPage() {
       {/* Services Menu Section */}
       <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto" id="services">
         <div className="text-center max-w-xl mx-auto mb-10">
-          <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: th.primary }}>
-            Eksklyuziv Narxlar & Xizmatlar
+          <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: th.primary }}>
+            Tanlangan Xizmatlar
           </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
             Xizmatlar menyusi
           </h2>
           <p className="text-sm text-stone-400 mt-2">
             Kerakli xizmatni tanlang va bir necha soniyada o&apos;zingizga qulay vaqtni band qiling.
           </p>
 
-          {/* Category Filter Tabs */}
-          <div className="flex items-center justify-center gap-2 mt-6 p-1 bg-white/[0.03] border border-white/[0.06] rounded-xl max-w-md mx-auto">
+          {/* Minimalist Segmented Category Filter Tabs */}
+          <div className="flex items-center justify-center gap-1.5 mt-6 p-1 bg-white/[0.03] border border-white/[0.06] rounded-xl max-w-md mx-auto">
             {[
               { id: 'all', label: 'Barchasi' },
               { id: 'hair', label: 'Soch' },
@@ -317,9 +296,9 @@ export default function BookingPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveCategory(tab.id)}
-                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-medium transition-all ${
                   activeCategory === tab.id 
-                    ? 'bg-white/10 text-white shadow-sm' 
+                    ? 'bg-white/10 text-white shadow-sm font-semibold' 
                     : 'text-stone-400 hover:text-stone-200'
                 }`}
                 style={activeCategory === tab.id ? { color: th.primary } : {}}
@@ -337,77 +316,78 @@ export default function BookingPage() {
             return (
               <motion.div
                 key={service.id ?? idx}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.05 }}
-                className={`relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 group hover:-translate-y-1 ${
+                transition={{ delay: idx * 0.04 }}
+                className={`relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 group hover:border-white/20 ${
                   isSignature 
-                    ? 'border-2 shadow-2xl' 
-                    : 'border-white/[0.08] hover:border-white/20'
+                    ? 'border-white/15 shadow-xl' 
+                    : 'border-white/[0.07]'
                 }`}
-                style={{ 
-                  backgroundColor: th.surface,
-                  borderColor: isSignature ? th.borderActive : undefined,
-                  boxShadow: isSignature ? `0 8px 30px -10px ${th.glow}` : undefined
-                }}
+                style={{ backgroundColor: th.surface }}
               >
-                {/* Popular Signature Badge */}
+                {/* Tasteful Signature Badge */}
                 {isSignature && (
                   <div 
-                    className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-lg flex items-center gap-1"
-                    style={{ backgroundColor: th.primary, color: '#0B0C10' }}
+                    className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide border shadow-md"
+                    style={{ 
+                      backgroundColor: th.badgeBg, 
+                      color: th.badgeText, 
+                      borderColor: th.badgeBorder 
+                    }}
                   >
-                    <Sparkles size={11} /> TOP TANLOV
+                    Tavsiya etiladi
                   </div>
                 )}
 
-                {/* Service Image */}
+                {/* Service Image with subtle vignette */}
                 <div className="relative aspect-[16/10] bg-stone-900 overflow-hidden">
                   <Image
                     src={service.imageUrl ?? SERVICE_IMAGES[idx] ?? SERVICE_IMAGES[0]}
                     alt={service.name}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-102 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#181A20] via-transparent to-transparent opacity-90" />
                   
                   {/* Duration Tag */}
-                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-lg backdrop-blur-md bg-black/60 border border-white/10 text-xs text-stone-200">
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md backdrop-blur-md bg-black/60 border border-white/10 text-xs text-stone-200">
                     <Clock size={12} style={{ color: th.primary }} />
                     <span>{service.duration} daqiqa</span>
                   </div>
                 </div>
 
-                {/* Content */}
+                {/* Content Card Body */}
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-bold text-lg text-white mb-1.5 group-hover:text-amber-200 transition-colors">
+                    <h3 className="font-semibold text-base text-white mb-1.5 group-hover:text-stone-100 transition-colors">
                       {service.name}
                     </h3>
                     <p className="text-xs text-stone-400 line-clamp-2 leading-relaxed mb-4">
-                      {service.description ?? "Professional darajadagi soch yoki soqol shakllantirish, issiq sochiq va yakuniy styling bilan."}
+                      {service.description ?? "Professional darajadagi soch yoki soqol shakllantirish, issiq sochiq va individual styling bilan."}
                     </p>
                   </div>
 
                   <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between">
                     <div>
-                      <p className="text-[10px] uppercase tracking-wider text-stone-400">Narxi</p>
-                      <p className="font-mono text-lg font-extrabold tracking-tight" style={{ color: th.primary }}>
-                        {service.price.toLocaleString('uz-UZ')} <span className="text-xs font-sans font-normal text-stone-400">so&apos;m</span>
+                      <p className="text-[10px] uppercase tracking-wider text-stone-500 font-medium">Narxi</p>
+                      <p className="text-lg font-semibold text-white tracking-tight tabular-nums">
+                        <span style={{ color: th.primary }}>{service.price.toLocaleString('uz-UZ')}</span>
+                        <span className="text-xs text-stone-400 font-normal ml-1">so&apos;m</span>
                       </p>
                     </div>
 
                     <button
                       onClick={() => openBooking(service)}
-                      className="px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase transition-all flex items-center gap-1.5 group-hover:shadow-md"
+                      className="px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all flex items-center gap-1.5 hover:brightness-110 active:scale-95"
                       style={{ 
                         backgroundColor: th.primary, 
-                        color: '#0B0C10' 
+                        color: '#121316' 
                       }}
                     >
                       <span>Tanlash</span>
-                      <ChevronRight size={14} />
+                      <ChevronRight size={13} />
                     </button>
                   </div>
                 </div>
@@ -420,19 +400,19 @@ export default function BookingPage() {
       {/* Location & Working Schedule Card */}
       <section className="py-12 px-4 sm:px-6 max-w-4xl mx-auto">
         <div 
-          className="rounded-3xl p-6 sm:p-8 border border-white/[0.08] relative overflow-hidden backdrop-blur-xl"
+          className="rounded-2xl p-6 sm:p-8 border border-white/[0.08] relative overflow-hidden backdrop-blur-xl"
           style={{ backgroundColor: th.surface }}
         >
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: th.primary }}>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: th.primary }}>
                 Joylashuv va Ish Jadvali
               </p>
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
                 {settings?.businessName ?? 'Jasurbek Barber'}
               </h3>
               <p className="text-sm text-stone-300 flex items-center gap-2 mb-2">
-                <MapPin size={16} style={{ color: th.primary }} />
+                <MapPin size={15} style={{ color: th.primary }} />
                 <span>{settings?.address ?? "Farg'ona shahar, Beeline ofisi ro'parasida"}</span>
               </p>
               <p className="text-xs text-stone-400 flex items-center gap-2">
@@ -446,17 +426,17 @@ export default function BookingPage() {
                 href={`https://yandex.com/maps/?text=${encodeURIComponent(settings?.address ?? "Farg'ona shahar")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-xs font-bold text-white transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-white transition-colors"
               >
-                <Navigation size={15} style={{ color: th.primary }} />
+                <Navigation size={14} style={{ color: th.primary }} />
                 <span>Yandex Xaritada ko&apos;rish</span>
               </a>
               <button
                 onClick={() => openBooking()}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all"
-                style={{ backgroundColor: th.primary, color: '#0B0C10' }}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-semibold tracking-wide transition-all"
+                style={{ backgroundColor: th.primary, color: '#121316' }}
               >
-                <Calendar size={15} />
+                <Calendar size={14} />
                 <span>Navbat olish</span>
               </button>
             </div>
@@ -464,29 +444,32 @@ export default function BookingPage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Understated Minimalist Footer */}
       <footer className="border-t border-white/[0.06] py-10 px-4 text-center text-xs text-stone-400">
-        <p className="mb-2">✂️ {settings?.businessName ?? 'Jasurbek Barber'} • Barcha huquqlar himoyalangan</p>
-        <p className="text-stone-400">Created for luxury salon experience</p>
+        <p className="mb-1 text-stone-300 font-medium">{settings?.businessName ?? 'Jasurbek Barber'}</p>
+        <p className="text-stone-400">Farg&apos;ona shahar • Barcha huquqlar himoyalangan</p>
       </footer>
 
       {/* Sticky Mobile Floating Booking Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 p-3.5 bg-black/80 backdrop-blur-xl border-t border-white/10">
-        <div className="flex items-center justify-between gap-3">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 p-3 bg-[#121316]/90 backdrop-blur-xl border-t border-white/[0.08]">
+        <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
           <div>
-            <p className="text-xs font-bold text-white">{settings?.barberName ?? 'Jasurbek'}</p>
-            <p className="text-[11px]" style={{ color: th.primary }}>Bo&apos;sh vaqtlar mavjud</p>
+            <p className="text-xs font-semibold text-white">{settings?.barberName ?? 'Jasurbek'}</p>
+            <p className="text-[11px] text-stone-400 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>Bo&apos;sh vaqtlar mavjud</span>
+            </p>
           </div>
           <button
             onClick={() => openBooking()}
-            className="px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-lg text-xs font-semibold tracking-wide shadow-md flex items-center gap-1.5"
             style={{ 
               backgroundColor: th.primary, 
-              color: '#0B0C10',
-              boxShadow: `0 2px 15px ${th.glow}` 
+              color: '#121316'
             }}
           >
-            <Calendar size={14} /> BRON QILISH
+            <Calendar size={13} />
+            <span>Bron qilish</span>
           </button>
         </div>
       </div>
