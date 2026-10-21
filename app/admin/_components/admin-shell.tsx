@@ -24,7 +24,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   if (authed === null) {
     return (
       <div className="min-h-screen bg-[#121316] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#C5A880] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#E5C365] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }

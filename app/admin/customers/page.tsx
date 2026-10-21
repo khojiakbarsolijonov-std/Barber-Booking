@@ -36,7 +36,7 @@ export default function CustomersPage() {
           value={search}
           onChange={(e: any) => setSearch(e?.target?.value ?? '')}
           placeholder="Ism yoki telefon..."
-          className="w-full pl-10 pr-4 py-2.5 bg-card border border-border rounded-xl text-foreground text-sm focus:outline-none focus:border-[#C8A97E] placeholder:text-muted-foreground"
+          className="w-full pl-10 pr-4 py-2.5 bg-card border border-border rounded-xl text-foreground text-sm focus:outline-none focus:border-[#E5C365] placeholder:text-muted-foreground"
         />
       </div>
 
@@ -65,7 +65,7 @@ export default function CustomersPage() {
                 <p className="text-xs text-muted-foreground flex items-center gap-3">
                   <span className="flex items-center gap-1"><Phone size={10} /> <span suppressHydrationWarning>{c?.phone ?? ''}</span></span>
                   <span>{c?.totalVisits ?? 0} tashrif</span>
-                  <span className="text-[#C8A97E]">{((c?.totalSpent ?? 0)).toLocaleString('uz-UZ')} so&apos;m</span>
+                  <span className="text-[#E5C365]">{((c?.totalSpent ?? 0)).toLocaleString('uz-UZ')} so&apos;m</span>
                 </p>
               </div>
               <ChevronRight size={16} className="text-muted-foreground" />

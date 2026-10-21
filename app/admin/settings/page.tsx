@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import AdminShell from '../_components/admin-shell';
-import { Settings, Save, Upload, Moon, Sun, User } from 'lucide-react';
+import { Settings, Save, Upload, Moon, Sun, Palette, Sparkles, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { LUXURY_THEMES } from '@/lib/themes';
 
@@ -65,17 +65,20 @@ export default function SettingsPage() {
   return (
     <AdminShell>
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-bold">Sozlamalar</h1>
-        <p className="text-sm text-muted-foreground">Biznes va tizim sozlamalari</p>
+        <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">Sozlamalar</h1>
+        <p className="text-xs text-stone-400">Brending, dizayn mavzulari va biznes sozlamalari</p>
       </div>
 
       {loading ? (
-        <div className="bg-card rounded-xl h-96 animate-pulse" />
+        <div className="bg-[#181A20] border border-white/10 rounded-xl h-96 animate-pulse" />
       ) : (
-        <div className="space-y-4">
-          <Section title="Brendning Lyuks Ranglar Mavzusi (Brand Color Theme)">
-            <p className="text-xs text-muted-foreground mb-3">Mijozlarga ko'rinadigan bron sahifasining eksklyuziv lyuks dizayn palitrasi.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+        <div className="space-y-5">
+          {/* Brand Luxury Theme Picker */}
+          <Section icon={Palette} title="Brendning Lyuks Ranglar Mavzusi (Brand Color Theme)">
+            <p className="text-xs text-stone-400 mb-3">
+              Mijozlarga ko&apos;rinadigan online bron sahifasining eksklyuziv lyuks dizayn palitrasi.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mb-2">
               {Object.values(LUXURY_THEMES).map((th) => {
                 const isSelected = (settings?.themePreset || 'noir-gold') === th.id;
                 return (
@@ -86,31 +89,57 @@ export default function SettingsPage() {
                       update('themePreset', th.id);
                       update('accentColor', th.primary);
                     }}
-                    className={`flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all relative overflow-hidden ${
+                    className={`flex items-start gap-3.5 p-4 rounded-xl border text-left transition-all relative overflow-hidden bg-[#111319] ${
                       isSelected
-                        ? 'border-2 shadow-lg bg-card'
-                        : 'border-border bg-muted/50 hover:bg-muted opacity-80 hover:opacity-100'
+                        ? 'border-2 shadow-xl ring-1 ring-white/10'
+                        : 'border-white/10 hover:border-white/20 hover:bg-[#151820]'
                     }`}
-                    style={isSelected ? { borderColor: th.primary, boxShadow: `0 0 16px ${th.glow}` } : {}}
+                    style={isSelected ? { 
+                      borderColor: th.primary, 
+                      boxShadow: `0 4px 20px ${th.glow}` 
+                    } : {}}
                   >
-                    {/* Swatch */}
-                    <div className="w-12 h-12 rounded-lg border border-white/10 shrink-0 flex flex-col overflow-hidden shadow-inner" style={{ backgroundColor: th.bg }}>
-                      <div className="h-6 w-full" style={{ backgroundColor: th.surface }} />
-                      <div className="h-6 w-full flex items-center justify-center">
-                        <div className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: th.primary }} />
+                    {/* Visual 3-Tone Swatch Box */}
+                    <div 
+                      className="w-14 h-14 rounded-xl border border-white/15 shrink-0 flex flex-col overflow-hidden shadow-md" 
+                      style={{ backgroundColor: th.bg }}
+                    >
+                      <div className="h-7 w-full border-b border-white/10" style={{ backgroundColor: th.surface }} />
+                      <div className="h-7 w-full flex items-center justify-center">
+                        <div 
+                          className="w-4 h-4 rounded-full shadow-sm" 
+                          style={{ 
+                            backgroundColor: th.primary, 
+                            boxShadow: `0 0 10px ${th.glow}` 
+                          }} 
+                        />
                       </div>
                     </div>
+
+                    {/* Content Details */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="font-semibold text-sm truncate">{th.name}</p>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-bold text-sm text-white truncate">{th.name}</p>
                         {isSelected && (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider" style={{ backgroundColor: th.badgeBg, color: th.primary }}>
+                          <span 
+                            className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 border"
+                            style={{ 
+                              backgroundColor: th.badgeBg, 
+                              color: th.primary,
+                              borderColor: th.badgeBorder 
+                            }}
+                          >
+                            <Check size={10} strokeWidth={3} />
                             Faol
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{th.description}</p>
-                      <p className="text-[11px] font-mono mt-1 opacity-60">{th.tagline} • {th.primary}</p>
+                      <p className="text-xs text-stone-300 mt-1 line-clamp-1">{th.description}</p>
+                      <p className="text-[11px] font-mono mt-1.5 flex items-center gap-1.5">
+                        <span className="text-stone-400">{th.tagline}</span>
+                        <span className="text-stone-600">•</span>
+                        <span className="font-bold tabular-nums" style={{ color: th.primary }}>{th.primary}</span>
+                      </p>
                     </div>
                   </button>
                 );
@@ -118,50 +147,60 @@ export default function SettingsPage() {
             </div>
           </Section>
 
-          <Section title="Boshqaruv Paneli Rejimi">
-            <p className="text-xs text-muted-foreground mb-3">Admin panelining ko'rinish rejimi.</p>
-            <div className="grid grid-cols-2 gap-3">
+          {/* Admin Appearance Mode */}
+          <Section icon={Moon} title="Boshqaruv Paneli Rejimi">
+            <p className="text-xs text-stone-400 mb-3">Admin panelining ko&apos;rinish rejimi.</p>
+            <div className="grid grid-cols-2 gap-3 max-w-md">
               <button
+                type="button"
                 onClick={() => setTheme('dark')}
-                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-semibold transition-colors ${
-                  mounted && theme === 'dark' ? 'border-[#C8A97E] bg-[#C8A97E]/15 text-[#C8A97E]' : 'border-border bg-muted text-muted-foreground hover:text-foreground'
+                className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-semibold transition-colors ${
+                  mounted && theme === 'dark' 
+                    ? 'border-[#E5C365] bg-[#E5C365]/15 text-[#E5C365]' 
+                    : 'border-white/10 bg-black/30 text-stone-400 hover:text-white'
                 }`}
               >
-                <Moon size={16} /> Qorong'i (Dark)
+                <Moon size={15} /> Qorong&apos;i (Dark)
               </button>
               <button
+                type="button"
                 onClick={() => setTheme('light')}
-                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-semibold transition-colors ${
-                  mounted && theme === 'light' ? 'border-[#C8A97E] bg-[#C8A97E]/15 text-[#C8A97E]' : 'border-border bg-muted text-muted-foreground hover:text-foreground'
+                className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-semibold transition-colors ${
+                  mounted && theme === 'light' 
+                    ? 'border-[#E5C365] bg-[#E5C365]/15 text-[#E5C365]' 
+                    : 'border-white/10 bg-black/30 text-stone-400 hover:text-white'
                 }`}
               >
-                <Sun size={16} /> Yorug' (Light)
+                <Sun size={15} /> Yorug&apos; (Light)
               </button>
             </div>
           </Section>
 
-          <Section title="Asosiy rasm (Avatar)">
-            <p className="text-xs text-muted-foreground mb-3">Bosh sahifada ko'rinadigan barber rasmi.</p>
+          {/* Barber Avatar Upload */}
+          <Section icon={Settings} title="Asosiy rasm (Avatar)">
+            <p className="text-xs text-stone-400 mb-3">Bosh sahifada ko&apos;rinadigan barber rasmi.</p>
             <div className="flex items-center gap-4">
-              <div className="relative w-20 h-20 rounded-full overflow-hidden bg-muted border-2 border-[#C8A97E] shrink-0">
+              <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-stone-900 border-2 border-white/15 shrink-0 shadow-md">
                 <Image src={currentAvatar} alt="Avatar" fill className="object-cover" sizes="80px" />
               </div>
               <div>
                 <input ref={fileRef} type="file" accept="image/*" onChange={handleUpload} className="hidden" />
                 <button
+                  type="button"
                   onClick={() => fileRef.current?.click()}
                   disabled={uploading}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-muted hover:bg-accent rounded-lg text-sm font-medium border border-border disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-semibold text-white border border-white/10 disabled:opacity-50 transition-colors"
                 >
-                  {uploading ? <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" /> : <Upload size={15} />}
-                  Rasmni o'zgartirish
+                  {uploading ? <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" /> : <Upload size={14} />}
+                  Rasmni o&apos;zgartirish
                 </button>
-                <p className="text-xs text-muted-foreground mt-1.5">JPG, PNG yoki WEBP · max 8MB</p>
+                <p className="text-[11px] text-stone-400 mt-1.5">JPG, PNG yoki WEBP · max 8MB</p>
               </div>
             </div>
           </Section>
 
-          <Section title="Biznes ma'lumotlari">
+          {/* Business Details */}
+          <Section icon={Settings} title="Biznes ma'lumotlari">
             <Field label="Biznes nomi" value={settings?.businessName ?? ''} onChange={(v: string) => update('businessName', v)} />
             <Field label="Barber ismi" value={settings?.barberName ?? ''} onChange={(v: string) => update('barberName', v)} />
             <Field label="Telefon" value={settings?.phone ?? ''} onChange={(v: string) => update('phone', v)} />
@@ -170,68 +209,85 @@ export default function SettingsPage() {
             <Field label="Telegram username" value={settings?.telegramUsername ?? ''} onChange={(v: string) => update('telegramUsername', v)} />
           </Section>
 
-          <Section title="Bron sozlamalari">
-            <div className="grid grid-cols-2 gap-3">
+          {/* Booking & Interval */}
+          <Section icon={Settings} title="Bron sozlamalari">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Field label="Slot interval (daqiqa)" value={String(settings?.slotInterval ?? 30)} onChange={(v: string) => update('slotInterval', Number(v))} type="number" />
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Rang</label>
-                <div className="flex items-center gap-2">
+                <label className="text-xs text-stone-300 font-medium mb-1.5 block">Maxsus Aksent Rang</label>
+                <div className="flex items-center gap-3">
                   <input
                     type="color"
-                    value={settings?.accentColor ?? '#C8A97E'}
-                    onChange={(e: any) => update('accentColor', e?.target?.value ?? '#C8A97E')}
-                    className="w-10 h-10 rounded-lg border border-border bg-transparent cursor-pointer"
+                    value={settings?.accentColor ?? '#E5C365'}
+                    onChange={(e: any) => update('accentColor', e?.target?.value ?? '#E5C365')}
+                    className="w-10 h-10 rounded-lg border border-white/20 bg-transparent cursor-pointer"
                   />
-                  <span className="text-sm font-mono text-muted-foreground">{settings?.accentColor ?? '#C8A97E'}</span>
+                  <span className="text-xs font-mono text-stone-300 font-semibold">{settings?.accentColor ?? '#E5C365'}</span>
                 </div>
               </div>
             </div>
           </Section>
 
-          <Section title="Eslatma sozlamalari">
+          {/* Automated Reminders */}
+          <Section icon={Settings} title="Eslatma sozlamalari">
             <div className="flex items-center gap-2 mb-3">
-              <input type="checkbox" checked={settings?.rebookingEnabled ?? true} onChange={(e: any) => update('rebookingEnabled', e?.target?.checked)} className="accent-[#C8A97E]" />
-              <span className="text-sm">Rebooking eslatmalarini yoqish</span>
+              <input 
+                type="checkbox" 
+                checked={settings?.rebookingEnabled ?? true} 
+                onChange={(e: any) => update('rebookingEnabled', e?.target?.checked)} 
+                className="w-4 h-4 rounded accent-[#E5C365]" 
+              />
+              <span className="text-xs font-semibold text-white">Rebooking eslatmalarini yoqish</span>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Field label="Standart eslatma kunlar" value={String(settings?.defaultRebookingDays ?? 20)} onChange={(v: string) => update('defaultRebookingDays', Number(v))} type="number" />
               <Field label="Eslatma vaqti" value={settings?.rebookingReminderTime ?? '11:00'} onChange={(v: string) => update('rebookingReminderTime', v)} type="time" />
             </div>
             <div className="mt-3">
-              <label className="text-xs text-muted-foreground mb-1 block">Eslatma xabar shabloni</label>
+              <label className="text-xs text-stone-300 font-medium mb-1.5 block">Eslatma xabar shabloni</label>
               <textarea
                 value={settings?.rebookingMessageTemplate ?? ''}
                 onChange={(e: any) => update('rebookingMessageTemplate', e?.target?.value ?? '')}
                 rows={3}
-                className="w-full bg-muted rounded-lg p-3 text-sm text-foreground border border-border focus:outline-none focus:border-[#C8A97E] resize-none"
+                className="w-full bg-[#101216] rounded-lg p-3 text-xs text-white border border-white/10 focus:outline-none focus:border-stone-400 resize-none"
               />
-              <p className="text-xs text-muted-foreground mt-1">Taglar: {'{name}'}, {'{days}'}</p>
+              <p className="text-[11px] text-stone-500 mt-1">Taglar: {'{name}'}, {'{days}'}</p>
             </div>
             <div className="mt-3">
-              <label className="text-xs text-muted-foreground mb-1 block">Rahmat xabari</label>
+              <label className="text-xs text-stone-300 font-medium mb-1.5 block">Rahmat xabari</label>
               <textarea
                 value={settings?.thankYouMessage ?? ''}
                 onChange={(e: any) => update('thankYouMessage', e?.target?.value ?? '')}
                 rows={2}
-                className="w-full bg-muted rounded-lg p-3 text-sm text-foreground border border-border focus:outline-none focus:border-[#C8A97E] resize-none"
+                className="w-full bg-[#101216] rounded-lg p-3 text-xs text-white border border-white/10 focus:outline-none focus:border-stone-400 resize-none"
               />
             </div>
           </Section>
 
-          <button onClick={save} disabled={saving} className="flex items-center gap-2 px-6 py-3 bg-[#C8A97E] text-black rounded-xl font-bold hover:bg-[#b89a6f] disabled:opacity-50">
-            {saving ? <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <Save size={16} />}
-            Saqlash
-          </button>
+          {/* Save Button */}
+          <div className="pt-2">
+            <button 
+              onClick={save} 
+              disabled={saving} 
+              className="flex items-center justify-center gap-2 px-8 py-3 bg-[#E5C365] text-[#121316] rounded-xl font-bold text-xs uppercase tracking-wider hover:brightness-110 disabled:opacity-50 transition-all shadow-lg"
+            >
+              {saving ? <div className="w-4 h-4 border-2 border-[#121316] border-t-transparent rounded-full animate-spin" /> : <Save size={16} />}
+              Saqlash
+            </button>
+          </div>
         </div>
       )}
     </AdminShell>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ icon: Icon = Settings, title, children }: { icon?: any; title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-card border border-border rounded-xl p-4">
-      <h3 className="font-semibold mb-3 text-sm flex items-center gap-2"><Settings size={14} className="text-[#C8A97E]" /> {title}</h3>
+    <div className="bg-[#181A20] border border-white/10 rounded-2xl p-5 shadow-sm">
+      <h3 className="font-bold mb-3.5 text-sm flex items-center gap-2 text-white">
+        <Icon size={16} className="text-[#E5C365]" /> 
+        <span>{title}</span>
+      </h3>
       <div className="space-y-3">{children}</div>
     </div>
   );
@@ -240,12 +296,12 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Field({ label, value, onChange, type = 'text' }: { label: string; value: string; onChange: (v: string) => void; type?: string }) {
   return (
     <div>
-      <label className="text-xs text-muted-foreground mb-1 block">{label}</label>
+      <label className="text-xs text-stone-300 font-medium mb-1.5 block">{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e: any) => onChange(e?.target?.value ?? '')}
-        className="w-full bg-muted rounded-lg px-3 py-2.5 text-sm text-foreground border border-border focus:outline-none focus:border-[#C8A97E]"
+        className="w-full bg-[#101216] rounded-xl px-3.5 py-2.5 text-xs text-white border border-white/10 focus:outline-none focus:border-stone-400 transition-colors"
       />
     </div>
   );

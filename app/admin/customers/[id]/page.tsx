@@ -70,7 +70,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
                   <Send size={14} /> Telegram ulangan {customer?.telegramUsername ? `(@${customer.telegramUsername})` : ''}
                 </p>
               )}
-              <p className="text-[#C8A97E] font-bold">
+              <p className="text-[#E5C365] font-bold">
                 Jami: {((customer?.totalSpent ?? 0)).toLocaleString('uz-UZ')} so&apos;m | {(customer?.appointments?.length ?? 0)} tashrif
               </p>
             </div>
@@ -84,9 +84,9 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
               onChange={(e: any) => setNotes(e?.target?.value ?? '')}
               placeholder="Mijoz haqida eslatma..."
               rows={3}
-              className="w-full bg-muted rounded-lg p-3 text-sm text-foreground border border-border focus:outline-none focus:border-[#C8A97E] resize-none placeholder:text-muted-foreground"
+              className="w-full bg-muted rounded-lg p-3 text-sm text-foreground border border-border focus:outline-none focus:border-[#E5C365] resize-none placeholder:text-muted-foreground"
             />
-            <button onClick={saveNotes} className="mt-2 flex items-center gap-1 px-3 py-1.5 bg-[#C8A97E]/20 text-[#C8A97E] rounded-lg text-xs hover:bg-[#C8A97E]/30">
+            <button onClick={saveNotes} className="mt-2 flex items-center gap-1 px-3 py-1.5 bg-[#E5C365]/20 text-[#E5C365] rounded-lg text-xs hover:bg-[#E5C365]/30">
               <Save size={12} /> Saqlash
             </button>
           </div>

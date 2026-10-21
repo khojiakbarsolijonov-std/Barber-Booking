@@ -99,7 +99,7 @@ export default function AdminDashboard() {
 
         <button 
           onClick={() => router.push('/admin/bookings')} 
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#C5A880] text-[#121316] text-xs font-semibold hover:brightness-110 transition-all self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E5C365] text-[#121316] text-xs font-semibold hover:brightness-110 transition-all self-start sm:self-auto"
         >
           <Plus size={14} />
           <span>Yangi bron qo&apos;shish</span>
@@ -120,10 +120,10 @@ export default function AdminDashboard() {
           
           {/* Active / Immediate Next Client Banner */}
           {data?.nextAppointment ? (
-            <div className="p-4 sm:p-5 rounded-xl border border-[#C5A880]/30 bg-[#181A20] shadow-sm">
+            <div className="p-4 sm:p-5 rounded-xl border border-[#E5C365]/30 bg-[#181A20] shadow-sm">
               <div className="flex items-center justify-between gap-2 mb-3">
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#C5A880] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#C5A880] animate-pulse" />
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#E5C365] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#E5C365] animate-pulse" />
                   Navbatdagi mijoz
                 </span>
                 <span className="text-xs font-semibold tabular-nums text-white bg-white/5 border border-white/10 px-2.5 py-1 rounded-md">
@@ -139,7 +139,7 @@ export default function AdminDashboard() {
                     <span>•</span>
                     <a 
                       href={`tel:${data.nextAppointment.phone}`}
-                      className="text-[#C5A880] hover:underline flex items-center gap-1"
+                      className="text-[#E5C365] hover:underline flex items-center gap-1"
                     >
                       <Phone size={11} /> {data.nextAppointment.phone}
                     </a>
@@ -203,7 +203,7 @@ export default function AdminDashboard() {
               </div>
               <button
                 onClick={() => router.push('/admin/bookings')}
-                className="text-xs text-[#C5A880] hover:underline flex items-center gap-1"
+                className="text-xs text-[#E5C365] hover:underline flex items-center gap-1"
               >
                 <span>Barcha bronlar</span>
                 <ChevronRight size={13} />
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
                             {appt.notes && (
                               <>
                                 <span>•</span>
-                                <span className="text-[#C5A880]">{appt.notes}</span>
+                                <span className="text-[#E5C365]">{appt.notes}</span>
                               </>
                             )}
                           </div>

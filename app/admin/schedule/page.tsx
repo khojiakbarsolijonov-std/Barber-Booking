@@ -101,7 +101,7 @@ export default function SchedulePage() {
         <>
           {/* Weekly Schedule */}
           <div className="bg-card border border-border rounded-xl p-4 mb-4">
-            <h3 className="font-semibold mb-3 flex items-center gap-2"><Clock size={16} className="text-[#C8A97E]" /> Haftalik jadval</h3>
+            <h3 className="font-semibold mb-3 flex items-center gap-2"><Clock size={16} className="text-[#E5C365]" /> Haftalik jadval</h3>
             <div className="space-y-3">
               {(schedule ?? []).map((s: any) => (
                 <div key={s?.dayOfWeek} className="flex items-center gap-3 flex-wrap">
@@ -110,7 +110,7 @@ export default function SchedulePage() {
                       type="checkbox"
                       checked={s?.isWorking ?? false}
                       onChange={(e: any) => updateDay(s.dayOfWeek, 'isWorking', e?.target?.checked ?? false)}
-                      className="accent-[#C8A97E]"
+                      className="accent-[#E5C365]"
                     />
                     <span className="text-sm">{DAYS[s?.dayOfWeek ?? 0] ?? ''}</span>
                   </label>
@@ -134,14 +134,14 @@ export default function SchedulePage() {
                 </div>
               ))}
             </div>
-            <button onClick={saveSchedule} className="mt-4 flex items-center gap-1 px-4 py-2 bg-[#C8A97E] text-black rounded-lg text-sm font-bold hover:bg-[#b89a6f]">
+            <button onClick={saveSchedule} className="mt-4 flex items-center gap-1 px-4 py-2 bg-[#E5C365] text-black rounded-lg text-sm font-bold hover:bg-[#b89a6f]">
               <Save size={14} /> Saqlash
             </button>
           </div>
 
           {/* Days Off */}
           <div className="bg-card border border-border rounded-xl p-4">
-            <h3 className="font-semibold mb-3 flex items-center gap-2"><Calendar size={16} className="text-[#C8A97E]" /> Dam olish kunlari</h3>
+            <h3 className="font-semibold mb-3 flex items-center gap-2"><Calendar size={16} className="text-[#E5C365]" /> Dam olish kunlari</h3>
             <div className="flex gap-2 mb-3 flex-wrap">
               <input
                 type="date"
@@ -155,7 +155,7 @@ export default function SchedulePage() {
                 placeholder="Sabab (ixtiyoriy)"
                 className="bg-muted rounded-lg px-3 py-2 text-sm text-foreground border border-border flex-1"
               />
-              <button onClick={addDayOff} className="flex items-center gap-1 px-3 py-2 bg-[#C8A97E]/20 text-[#C8A97E] rounded-lg text-sm hover:bg-[#C8A97E]/30">
+              <button onClick={addDayOff} className="flex items-center gap-1 px-3 py-2 bg-[#E5C365]/20 text-[#E5C365] rounded-lg text-sm hover:bg-[#E5C365]/30">
                 <Plus size={14} /> Qo&apos;shish
               </button>
             </div>
@@ -173,7 +173,7 @@ export default function SchedulePage() {
 
           {/* Block time ranges (personal time-off) */}
           <div className="bg-card border border-border rounded-xl p-4 mt-4">
-            <h3 className="font-semibold mb-1 flex items-center gap-2"><Ban size={16} className="text-[#C8A97E]" /> Vaqtlarni yopish (Bandman)</h3>
+            <h3 className="font-semibold mb-1 flex items-center gap-2"><Ban size={16} className="text-[#E5C365]" /> Vaqtlarni yopish (Bandman)</h3>
             <p className="text-xs text-muted-foreground mb-3">Shaxsiy ish chiqib qolganda, tanlangan kunning ma&apos;lum vaqt oralig&apos;ini yoping — u mijozlarga bo&apos;sh ko&apos;rinmaydi.</p>
             <div className="flex gap-2 mb-3 flex-wrap items-end">
               <div>
@@ -209,7 +209,7 @@ export default function SchedulePage() {
                 placeholder="Sabab (ixtiyoriy)"
                 className="bg-muted rounded-lg px-3 py-2 text-sm text-foreground border border-border flex-1 min-w-[120px]"
               />
-              <button onClick={addBlock} className="flex items-center gap-1 px-3 py-2 bg-[#C8A97E]/20 text-[#C8A97E] rounded-lg text-sm hover:bg-[#C8A97E]/30">
+              <button onClick={addBlock} className="flex items-center gap-1 px-3 py-2 bg-[#E5C365]/20 text-[#E5C365] rounded-lg text-sm hover:bg-[#E5C365]/30">
                 <Plus size={14} /> Yopish
               </button>
             </div>

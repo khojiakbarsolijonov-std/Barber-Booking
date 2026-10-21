@@ -74,7 +74,7 @@ export default function ServicesPage() {
           <h1 className="font-display text-2xl font-bold">Xizmatlar</h1>
           <p className="text-sm text-muted-foreground">Xizmatlarni boshqaring</p>
         </div>
-        <button onClick={() => { resetForm(); setShowForm(true); }} className="flex items-center gap-1 px-4 py-2 bg-[#C8A97E] text-black rounded-lg text-sm font-bold hover:bg-[#b89a6f]">
+        <button onClick={() => { resetForm(); setShowForm(true); }} className="flex items-center gap-1 px-4 py-2 bg-[#E5C365] text-black rounded-lg text-sm font-bold hover:bg-[#b89a6f]">
           <Plus size={16} /> Qo&apos;shish
         </button>
       </div>
@@ -86,13 +86,13 @@ export default function ServicesPage() {
             <button onClick={resetForm}><X size={18} className="text-muted-foreground" /></button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <input value={form.name} onChange={(e: any) => setForm({ ...form, name: e?.target?.value ?? '' })} placeholder="Xizmat nomi" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#C8A97E]" />
-            <input value={form.description} onChange={(e: any) => setForm({ ...form, description: e?.target?.value ?? '' })} placeholder="Tavsif" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#C8A97E]" />
-            <input type="number" value={form.price} onChange={(e: any) => setForm({ ...form, price: e?.target?.value ?? '' })} placeholder="Narx (so'm)" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#C8A97E]" />
-            <input type="number" value={form.duration} onChange={(e: any) => setForm({ ...form, duration: e?.target?.value ?? '' })} placeholder="Davomiylik (daqiqa)" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#C8A97E]" />
-            <input type="number" value={form.rebookingReminderDays} onChange={(e: any) => setForm({ ...form, rebookingReminderDays: e?.target?.value ?? '' })} placeholder="Eslatma kunlar (masalan 20)" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#C8A97E]" />
+            <input value={form.name} onChange={(e: any) => setForm({ ...form, name: e?.target?.value ?? '' })} placeholder="Xizmat nomi" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#E5C365]" />
+            <input value={form.description} onChange={(e: any) => setForm({ ...form, description: e?.target?.value ?? '' })} placeholder="Tavsif" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#E5C365]" />
+            <input type="number" value={form.price} onChange={(e: any) => setForm({ ...form, price: e?.target?.value ?? '' })} placeholder="Narx (so'm)" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#E5C365]" />
+            <input type="number" value={form.duration} onChange={(e: any) => setForm({ ...form, duration: e?.target?.value ?? '' })} placeholder="Davomiylik (daqiqa)" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#E5C365]" />
+            <input type="number" value={form.rebookingReminderDays} onChange={(e: any) => setForm({ ...form, rebookingReminderDays: e?.target?.value ?? '' })} placeholder="Eslatma kunlar (masalan 20)" className="bg-muted rounded-lg px-3 py-2.5 text-sm border border-border text-foreground focus:outline-none focus:border-[#E5C365]" />
           </div>
-          <button onClick={handleSave} className="mt-3 flex items-center gap-1 px-4 py-2 bg-[#C8A97E] text-black rounded-lg text-sm font-bold hover:bg-[#b89a6f]">
+          <button onClick={handleSave} className="mt-3 flex items-center gap-1 px-4 py-2 bg-[#E5C365] text-black rounded-lg text-sm font-bold hover:bg-[#b89a6f]">
             <Check size={16} /> Saqlash
           </button>
         </div>
@@ -104,8 +104,8 @@ export default function ServicesPage() {
         <div className="space-y-2">
           {(services ?? []).map((s: any) => (
             <div key={s?.id} className={`bg-card border border-border rounded-xl p-4 flex items-center ${!s?.isActive ? 'opacity-50' : ''}`}>
-              <div className="w-10 h-10 rounded-lg bg-[#C8A97E]/10 flex items-center justify-center mr-3">
-                <Scissors size={18} className="text-[#C8A97E]" />
+              <div className="w-10 h-10 rounded-lg bg-[#E5C365]/10 flex items-center justify-center mr-3">
+                <Scissors size={18} className="text-[#E5C365]" />
               </div>
               <div className="flex-1">
                 <p className="font-semibold text-sm">{s?.name ?? ''}</p>

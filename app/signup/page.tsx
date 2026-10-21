@@ -43,21 +43,21 @@ export default function SignupPage() {
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-[#C8A97E]/20 flex items-center justify-center mx-auto mb-4">
-            <Scissors size={28} className="text-[#C8A97E]" />
+          <div className="w-16 h-16 rounded-full bg-[#E5C365]/20 flex items-center justify-center mx-auto mb-4">
+            <Scissors size={28} className="text-[#E5C365]" />
           </div>
           <h1 className="font-display text-2xl font-bold text-white">Ro&apos;yxatdan o&apos;tish</h1>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input type="text" value={name} onChange={(e: any) => setName(e?.target?.value ?? '')} placeholder="Ism" className="w-full px-4 py-3 bg-zinc-900 rounded-xl border border-zinc-800 text-white focus:outline-none focus:border-[#C8A97E]" />
-          <input type="email" value={email} onChange={(e: any) => setEmail(e?.target?.value ?? '')} placeholder="Email" className="w-full px-4 py-3 bg-zinc-900 rounded-xl border border-zinc-800 text-white focus:outline-none focus:border-[#C8A97E]" />
-          <input type="password" value={password} onChange={(e: any) => setPassword(e?.target?.value ?? '')} placeholder="Parol" className="w-full px-4 py-3 bg-zinc-900 rounded-xl border border-zinc-800 text-white focus:outline-none focus:border-[#C8A97E]" />
-          <button type="submit" disabled={loading} className="w-full py-3.5 bg-[#C8A97E] text-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#b89a6f] disabled:opacity-50">
+          <input type="text" value={name} onChange={(e: any) => setName(e?.target?.value ?? '')} placeholder="Ism" className="w-full px-4 py-3 bg-zinc-900 rounded-xl border border-zinc-800 text-white focus:outline-none focus:border-[#E5C365]" />
+          <input type="email" value={email} onChange={(e: any) => setEmail(e?.target?.value ?? '')} placeholder="Email" className="w-full px-4 py-3 bg-zinc-900 rounded-xl border border-zinc-800 text-white focus:outline-none focus:border-[#E5C365]" />
+          <input type="password" value={password} onChange={(e: any) => setPassword(e?.target?.value ?? '')} placeholder="Parol" className="w-full px-4 py-3 bg-zinc-900 rounded-xl border border-zinc-800 text-white focus:outline-none focus:border-[#E5C365]" />
+          <button type="submit" disabled={loading} className="w-full py-3.5 bg-[#E5C365] text-black rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#b89a6f] disabled:opacity-50">
             {loading ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <><UserPlus size={18} /> Ro&apos;yxatdan o&apos;tish</>}
           </button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
-          Akkauntingiz bormi? <a href="/admin/login" className="text-[#C8A97E] hover:underline">Kirish</a>
+          Akkauntingiz bormi? <a href="/admin/login" className="text-[#E5C365] hover:underline">Kirish</a>
         </p>
       </div>
     </div>

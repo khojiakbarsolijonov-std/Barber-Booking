@@ -47,7 +47,7 @@ export default function AdminSidebar() {
           </button>
           <span className="font-semibold text-sm text-white">Jasurbek Barber</span>
         </div>
-        <span className="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border border-[#C5A880]/30 text-[#C5A880] bg-[#C5A880]/10">
+        <span className="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border border-[#E5C365]/30 text-[#E5C365] bg-[#E5C365]/10">
           Admin
         </span>
       </div>
@@ -78,7 +78,7 @@ export default function AdminSidebar() {
                       onClick={() => { router.push(item.href); setOpen(false); }}
                       className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                         active 
-                          ? 'bg-[#C5A880]/15 text-[#C5A880]' 
+                          ? 'bg-[#E5C365]/15 text-[#E5C365]' 
                           : 'text-stone-400 hover:text-white hover:bg-white/5'
                       }`}
                     >
@@ -118,7 +118,7 @@ export default function AdminSidebar() {
                 onClick={() => router.push(item.href)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-colors ${
                   active 
-                    ? 'bg-[#C5A880]/15 text-[#C5A880]' 
+                    ? 'bg-[#E5C365]/15 text-[#E5C365]' 
                     : 'text-stone-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
@@ -148,7 +148,7 @@ export default function AdminSidebar() {
               key={item.href}
               onClick={() => router.push(item.href)}
               className={`flex flex-col items-center gap-1 py-1 px-3 rounded-lg text-[10px] font-medium transition-colors ${
-                active ? 'text-[#C5A880]' : 'text-stone-400 hover:text-white'
+                active ? 'text-[#E5C365]' : 'text-stone-400 hover:text-white'
               }`}
             >
               <Icon size={18} />

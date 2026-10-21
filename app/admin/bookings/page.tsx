@@ -165,7 +165,7 @@ export default function BookingsPage() {
         </div>
         <button
           onClick={openAdd}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#C5A880] text-[#121316] rounded-lg text-xs font-semibold hover:brightness-110 transition-all self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#E5C365] text-[#121316] rounded-lg text-xs font-semibold hover:brightness-110 transition-all self-start sm:self-auto"
         >
           <Plus size={15} />
           <span>Yangi bron qo&apos;shish</span>
@@ -233,7 +233,7 @@ export default function BookingsPage() {
               onClick={() => setStatusFilter(s.id)}
               className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
                 statusFilter === s.id 
-                  ? 'bg-[#C5A880]/20 text-[#C5A880] border border-[#C5A880]/30' 
+                  ? 'bg-[#E5C365]/20 text-[#E5C365] border border-[#E5C365]/30' 
                   : 'text-stone-400 hover:text-white'
               }`}
             >
@@ -302,7 +302,7 @@ export default function BookingsPage() {
                         <p className="font-semibold text-white">{a?.customer?.name ?? 'Noma\'lum'}</p>
                         <a 
                           href={`tel:${a?.customer?.phone}`} 
-                          className="text-[11px] text-stone-400 hover:text-[#C5A880] flex items-center gap-1 mt-0.5"
+                          className="text-[11px] text-stone-400 hover:text-[#E5C365] flex items-center gap-1 mt-0.5"
                         >
                           <Phone size={10} />
                           <span>{a?.customer?.phone}</span>
@@ -311,7 +311,7 @@ export default function BookingsPage() {
                       <td className="py-3.5 px-4">
                         <p className="font-medium text-white">{a?.service?.name ?? ''}</p>
                         {a.notes && (
-                          <p className="text-[11px] text-[#C5A880] mt-0.5 line-clamp-1">{a.notes}</p>
+                          <p className="text-[11px] text-[#E5C365] mt-0.5 line-clamp-1">{a.notes}</p>
                         )}
                       </td>
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">
@@ -385,7 +385,7 @@ export default function BookingsPage() {
                   </div>
 
                   {a.notes && (
-                    <div className="text-[11px] text-[#C5A880] p-1.5 rounded bg-white/[0.02] border border-white/[0.04]">
+                    <div className="text-[11px] text-[#E5C365] p-1.5 rounded bg-white/[0.02] border border-white/[0.04]">
                       {a.notes}
                     </div>
                   )}
@@ -505,7 +505,7 @@ export default function BookingsPage() {
                   type="button"
                   disabled={saving}
                   onClick={createBooking}
-                  className="flex-1 py-2.5 rounded-lg bg-[#C5A880] text-[#121316] font-semibold hover:brightness-110 transition-all disabled:opacity-50"
+                  className="flex-1 py-2.5 rounded-lg bg-[#E5C365] text-[#121316] font-semibold hover:brightness-110 transition-all disabled:opacity-50"
                 >
                   {saving ? 'Saqlanmoqda...' : 'Bron qilish'}
                 </button>
